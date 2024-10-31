@@ -2,16 +2,23 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use App\Models\HotelManager;
 
 class HotelManagerSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
-    public function run(): void
+    public function run()
     {
-        //
+        HotelManager::create([
+            'username' => 'manager1',
+            'email' => 'manager1@example.com',
+            'password' => bcrypt('password'),
+        ]);
+
+        HotelManager::create([
+            'username' => 'manager2',
+            'email' => 'manager2@example.com',
+            'password' => bcrypt('password'),
+        ]);
     }
 }

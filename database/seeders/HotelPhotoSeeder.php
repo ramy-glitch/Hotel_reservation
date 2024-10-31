@@ -2,16 +2,23 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use App\Models\ReservationRoom;
 
-class HotelPhotoSeeder extends Seeder
+class ReservationRoomSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
-    public function run(): void
+    public function run()
     {
-        //
+        ReservationRoom::create([
+            'reservation_id' => 1,
+            'room_id' => 1,
+            'room_price' => 200.00,
+        ]);
+
+        ReservationRoom::create([
+            'reservation_id' => 2,
+            'room_id' => 2,
+            'room_price' => 300.00,
+        ]);
     }
 }

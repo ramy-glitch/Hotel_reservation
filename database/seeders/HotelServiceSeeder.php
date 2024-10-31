@@ -2,16 +2,21 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use App\Models\HotelService;
 
 class HotelServiceSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
-    public function run(): void
+    public function run()
     {
-        //
+        HotelService::create([
+            'hotel_id' => 1,
+            'service_id' => 1,
+        ]);
+
+        HotelService::create([
+            'hotel_id' => 2,
+            'service_id' => 2,
+        ]);
     }
 }

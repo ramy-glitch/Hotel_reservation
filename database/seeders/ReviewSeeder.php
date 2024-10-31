@@ -2,16 +2,25 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use App\Models\Review;
 
 class ReviewSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
-    public function run(): void
+    public function run()
     {
-        //
+        Review::create([
+            'rating' => 5,
+            'review_comment' => 'Excellent service!',
+            'customer_id' => 1,
+            'hotel_id' => 1,
+        ]);
+
+        Review::create([
+            'rating' => 4,
+            'review_comment' => 'Very good experience.',
+            'customer_id' => 2,
+            'hotel_id' => 2,
+        ]);
     }
 }

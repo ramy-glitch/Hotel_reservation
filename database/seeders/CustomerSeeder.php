@@ -2,16 +2,26 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use App\Models\Customer;
 
 class CustomerSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
-    public function run(): void
+    public function run()
     {
-        //
+        Customer::create([
+            'username' => 'customer1',
+            'email' => 'customer1@example.com',
+            'password' => bcrypt('password'),
+            'birth_date' => '1990-01-01',
+        ]);
+
+        Customer::create([
+            'username' => 'customer2',
+            'email' => 'customer2@example.com',
+            'password' => bcrypt('password'),
+            'birth_date' => '1992-02-02',
+        ]);
     }
 }
+
