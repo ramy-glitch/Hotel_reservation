@@ -34,22 +34,26 @@ class CustomerController extends Controller
             'username' => 'required|unique:customers|max:255',
             'email' => 'required|email|unique:customers|max:255',
             'password' => 'required|min:6',
-            'birth_date' => 'required|date',
+            'birth_date' => ['required', 'date', function ($attribute, $value, $fail) {
+                if (now()->diffInYears($value) < 19) {
+                    $fail('The customer must be at least 19 years old.');
+                }
+            }],
         ]);
-
+    
         if ($validator->fails()) {
             return redirect()->route('customers.create')
                              ->withErrors($validator)
                              ->withInput();
         }
-
+    
         $customer = Customer::create([
             'username' => $request->username,
             'email' => $request->email,
             'password' => bcrypt($request->password),
             'birth_date' => $request->birth_date,
         ]);
-
+    
         return redirect()->route('customers.index')->with('success', 'Customer created successfully');
     }
 
@@ -68,26 +72,30 @@ class CustomerController extends Controller
         if (!$customer) {
             return redirect()->route('customers.index')->with('error', 'Customer not found');
         }
-
+    
         $validator = Validator::make($request->all(), [
             'username' => 'sometimes|required|unique:customers,username,' . $id . '|max:255',
             'email' => 'sometimes|required|email|unique:customers,email,' . $id . '|max:255',
             'password' => 'sometimes|required|min:6',
-            'birth_date' => 'sometimes|required|date',
+            'birth_date' => ['sometimes', 'required', 'date', function ($attribute, $value, $fail) {
+                if (now()->diffInYears($value) < 19) {
+                    $fail('The customer must be at least 19 years old.');
+                }
+            }],
         ]);
-
+    
         if ($validator->fails()) {
             return redirect()->route('customers.edit', $id)
                              ->withErrors($validator)
                              ->withInput();
         }
-
+    
         $customer->update($request->all());
         if ($request->has('password')) {
             $customer->password = bcrypt($request->password);
             $customer->save();
         }
-
+    
         return redirect()->route('customers.index')->with('success', 'Customer updated successfully');
     }
 
