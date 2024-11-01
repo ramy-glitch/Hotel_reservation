@@ -11,16 +11,21 @@ class AdminController extends Controller
     public function index()
     {
         $admins = Admin::all();
-        return response()->json($admins);
+        return view('admins.index', compact('admins'));
     }
 
     public function show($id)
     {
         $admin = Admin::find($id);
         if (!$admin) {
-            return response()->json(['message' => 'Admin not found'], 404);
+            return redirect()->route('admins.index')->with('error', 'Admin not found');
         }
-        return response()->json($admin);
+        return view('admins.show', compact('admin'));
+    }
+
+    public function create()
+    {
+        return view('admins.create');
     }
 
     public function store(Request $request)
@@ -32,7 +37,9 @@ class AdminController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json($validator->errors(), 400);
+            return redirect()->route('admins.create')
+                             ->withErrors($validator)
+                             ->withInput();
         }
 
         $admin = Admin::create([
@@ -41,14 +48,23 @@ class AdminController extends Controller
             'password' => bcrypt($request->password),
         ]);
 
-        return response()->json($admin, 201);
+        return redirect()->route('admins.index')->with('success', 'Admin created successfully');
+    }
+
+    public function edit($id)
+    {
+        $admin = Admin::find($id);
+        if (!$admin) {
+            return redirect()->route('admins.index')->with('error', 'Admin not found');
+        }
+        return view('admins.edit', compact('admin'));
     }
 
     public function update(Request $request, $id)
     {
         $admin = Admin::find($id);
         if (!$admin) {
-            return response()->json(['message' => 'Admin not found'], 404);
+            return redirect()->route('admins.index')->with('error', 'Admin not found');
         }
 
         $validator = Validator::make($request->all(), [
@@ -58,7 +74,9 @@ class AdminController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json($validator->errors(), 400);
+            return redirect()->route('admins.edit', $id)
+                             ->withErrors($validator)
+                             ->withInput();
         }
 
         $admin->update($request->all());
@@ -67,17 +85,17 @@ class AdminController extends Controller
             $admin->save();
         }
 
-        return response()->json($admin, 200);
+        return redirect()->route('admins.index')->with('success', 'Admin updated successfully');
     }
 
     public function destroy($id)
     {
         $admin = Admin::find($id);
         if (!$admin) {
-            return response()->json(['message' => 'Admin not found'], 404);
+            return redirect()->route('admins.index')->with('error', 'Admin not found');
         }
 
         $admin->delete();
-        return response()->json(null, 204);
+        return redirect()->route('admins.index')->with('success', 'Admin deleted successfully');
     }
 }
