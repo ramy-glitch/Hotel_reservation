@@ -11,16 +11,21 @@ class CustomerController extends Controller
     public function index()
     {
         $customers = Customer::all();
-        return response()->json($customers);
+        return view('customers.index', compact('customers'));
     }
 
     public function show($id)
     {
         $customer = Customer::find($id);
         if (!$customer) {
-            return response()->json(['message' => 'Customer not found'], 404);
+            return redirect()->route('customers.index')->with('error', 'Customer not found');
         }
-        return response()->json($customer);
+        return view('customers.show', compact('customer'));
+    }
+
+    public function create()
+    {
+        return view('customers.create');
     }
 
     public function store(Request $request)
@@ -33,7 +38,9 @@ class CustomerController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json($validator->errors(), 400);
+            return redirect()->route('customers.create')
+                             ->withErrors($validator)
+                             ->withInput();
         }
 
         $customer = Customer::create([
@@ -43,14 +50,23 @@ class CustomerController extends Controller
             'birth_date' => $request->birth_date,
         ]);
 
-        return response()->json($customer, 201);
+        return redirect()->route('customers.index')->with('success', 'Customer created successfully');
+    }
+
+    public function edit($id)
+    {
+        $customer = Customer::find($id);
+        if (!$customer) {
+            return redirect()->route('customers.index')->with('error', 'Customer not found');
+        }
+        return view('customers.edit', compact('customer'));
     }
 
     public function update(Request $request, $id)
     {
         $customer = Customer::find($id);
         if (!$customer) {
-            return response()->json(['message' => 'Customer not found'], 404);
+            return redirect()->route('customers.index')->with('error', 'Customer not found');
         }
 
         $validator = Validator::make($request->all(), [
@@ -61,7 +77,9 @@ class CustomerController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json($validator->errors(), 400);
+            return redirect()->route('customers.edit', $id)
+                             ->withErrors($validator)
+                             ->withInput();
         }
 
         $customer->update($request->all());
@@ -70,17 +88,17 @@ class CustomerController extends Controller
             $customer->save();
         }
 
-        return response()->json($customer, 200);
+        return redirect()->route('customers.index')->with('success', 'Customer updated successfully');
     }
 
     public function destroy($id)
     {
         $customer = Customer::find($id);
         if (!$customer) {
-            return response()->json(['message' => 'Customer not found'], 404);
+            return redirect()->route('customers.index')->with('error', 'Customer not found');
         }
 
         $customer->delete();
-        return response()->json(null, 204);
+        return redirect()->route('customers.index')->with('success', 'Customer deleted successfully');
     }
 }
