@@ -10,15 +10,15 @@ class CustomerSeeder extends Seeder
     public function run()
     {
         Customer::create([
-            'username' => 'customer1',
-            'email' => 'customer1@example.com',
+            'username' => 'customer7',
+            'email' => 'customer7@example.com',
             'password' => bcrypt('password'),
             'birth_date' => '1990-01-01',
         ]);
 
         Customer::create([
-            'username' => 'customer2',
-            'email' => 'customer2@example.com',
+            'username' => 'customer8',
+            'email' => 'customer8@example.com',
             'password' => bcrypt('password'),
             'birth_date' => '1992-02-02',
         ]);

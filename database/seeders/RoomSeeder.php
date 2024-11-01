@@ -17,7 +17,7 @@ class RoomSeeder extends Seeder
             'adult_price' => 200.00,
             'child_price' => 100.00,
             'availability' => true,
-            'hotel_id' => 1,
+            'hotel_id' => 5,
         ]);
 
         Room::create([
@@ -28,7 +28,7 @@ class RoomSeeder extends Seeder
             'adult_price' => 300.00,
             'child_price' => 150.00,
             'availability' => true,
-            'hotel_id' => 2,
+            'hotel_id' => 6,
         ]);
     }
 }

@@ -10,13 +10,13 @@ class HotelServiceSeeder extends Seeder
     public function run()
     {
         HotelService::create([
-            'hotel_id' => 1,
-            'service_id' => 1,
+            'hotel_id' => 5,
+            'service_id' => 5,
         ]);
 
         HotelService::create([
-            'hotel_id' => 2,
-            'service_id' => 2,
+            'hotel_id' => 6,
+            'service_id' => 6,
         ]);
     }
 }

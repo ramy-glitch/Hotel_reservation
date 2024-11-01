@@ -11,12 +11,12 @@ class RoomPhotoSeeder extends Seeder
     {
         RoomPhoto::create([
             'photo_url' => 'https://example.com/room1/photo1.jpg',
-            'room_id' => 1,
+            'room_id' => 3,
         ]);
 
         RoomPhoto::create([
             'photo_url' => 'https://example.com/room2/photo1.jpg',
-            'room_id' => 2,
+            'room_id' => 4,
         ]);
     }
 }

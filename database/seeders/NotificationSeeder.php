@@ -11,12 +11,12 @@ class NotificationSeeder extends Seeder
     {
         Notification::create([
             'message' => 'Your reservation is confirmed.',
-            'customer_id' => 1,
+            'customer_id' => 7,
         ]);
 
         Notification::create([
             'message' => 'Your room is ready.',
-            'customer_id' => 2,
+            'customer_id' => 8,
         ]);
     }
 }

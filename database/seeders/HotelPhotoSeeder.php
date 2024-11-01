@@ -3,22 +3,20 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\ReservationRoom;
+use App\Models\HotelPhoto;
 
-class ReservationRoomSeeder extends Seeder
+class HotelPhotoSeeder extends Seeder
 {
     public function run()
     {
-        ReservationRoom::create([
-            'reservation_id' => 1,
-            'room_id' => 1,
-            'room_price' => 200.00,
+        HotelPhoto::create([
+            'photo_url' => 'https://example.com/hotel1/photo1.jpg',
+            'hotel_id' => 5,
         ]);
 
-        ReservationRoom::create([
-            'reservation_id' => 2,
-            'room_id' => 2,
-            'room_price' => 300.00,
+        HotelPhoto::create([
+            'photo_url' => 'https://example.com/hotel2/photo1.jpg',
+            'hotel_id' => 6,
         ]);
     }
 }
