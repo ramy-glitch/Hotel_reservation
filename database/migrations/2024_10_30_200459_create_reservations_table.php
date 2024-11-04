@@ -12,8 +12,8 @@ class CreateReservationsTable extends Migration
             $table->id();
             $table->date('check_in_date');
             $table->date('check_out_date');
-            $table->foreignId('customer_id')->constrained('customers');
-            $table->foreignId('hotel_id')->constrained('hotels');
+            $table->foreignId('customer_id')->constrained('customers')->onDelete('cascade');
+            $table->foreignId('hotel_id')->constrained('hotels')->onDelete('cascade');
             $table->string('status');
             $table->integer('number_of_adults');
             $table->integer('number_of_children');

@@ -11,7 +11,7 @@ class CreateRoomPhotosTable extends Migration
         Schema::create('room_photos', function (Blueprint $table) {
             $table->id();
             $table->text('photo_url');
-            $table->foreignId('room_id')->constrained('rooms');
+            $table->foreignId('room_id')->constrained('rooms')->onDelete('cascade');
             $table->timestamps();
         });
     }

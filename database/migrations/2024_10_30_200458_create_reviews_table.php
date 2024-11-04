@@ -12,8 +12,8 @@ class CreateReviewsTable extends Migration
             $table->id();
             $table->integer('rating');
             $table->text('review_comment')->nullable();
-            $table->foreignId('customer_id')->constrained('customers');
-            $table->foreignId('hotel_id')->constrained('hotels');
+            $table->foreignId('customer_id')->constrained('customers')->onDelete('cascade');
+            $table->foreignId('hotel_id')->constrained('hotels')->onDelete('cascade');
             $table->timestamps();
         });
     }

@@ -9,8 +9,8 @@ class CreateHotelServicesTable extends Migration
     public function up()
     {
         Schema::create('hotel_services', function (Blueprint $table) {
-            $table->foreignId('hotel_id')->constrained('hotels');
-            $table->foreignId('service_id')->constrained('services');
+            $table->foreignId('hotel_id')->constrained('hotels')->onDelete('cascade');
+            $table->foreignId('service_id')->constrained('services')->onDelete('cascade');
             $table->primary(['hotel_id', 'service_id']);
         });
     }

@@ -9,8 +9,8 @@ class CreateReservationRoomsTable extends Migration
     public function up()
     {
         Schema::create('reservation_rooms', function (Blueprint $table) {
-            $table->foreignId('reservation_id')->constrained('reservations');
-            $table->foreignId('room_id')->constrained('rooms');
+            $table->foreignId('reservation_id')->constrained('reservations')->onDelete('cascade');
+            $table->foreignId('room_id')->constrained('rooms')->onDelete('cascade');
             $table->double('room_price');
             $table->primary(['reservation_id', 'room_id']);
         });

@@ -17,7 +17,7 @@ class CreateRoomsTable extends Migration
             $table->double('adult_price');
             $table->double('child_price');
             $table->boolean('availability');
-            $table->foreignId('hotel_id')->constrained('hotels');
+            $table->foreignId('hotel_id')->constrained('hotels')->onDelete('cascade');
             $table->timestamps();
         });
     }

@@ -13,7 +13,7 @@ class CreateHotelsTable extends Migration
             $table->string('hotelname');
             $table->string('location');
             $table->integer('child_age_limit');
-            $table->foreignId('manager_id')->nullable()->constrained('hotel_managers');
+            $table->foreignId('manager_id')->constrained('hotel_managers')->onDelete('cascade');
             $table->timestamps();
         });
     }
