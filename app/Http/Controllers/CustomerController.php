@@ -35,7 +35,7 @@ class CustomerController extends Controller
             'email' => 'required|email|unique:customers|max:255',
             'password' => 'required|min:6',
             'birth_date' => ['required', 'date', function ($attribute, $value, $fail) {
-                if (now()->diffInYears($value) < 19) {
+                if (now()->diffInYears($value) > 19) {
                     $fail('The customer must be at least 19 years old.');
                 }
             }],
@@ -78,7 +78,7 @@ class CustomerController extends Controller
             'email' => 'sometimes|required|email|unique:customers,email,' . $id . '|max:255',
             'password' => 'sometimes|required|min:6',
             'birth_date' => ['sometimes', 'required', 'date', function ($attribute, $value, $fail) {
-                if (now()->diffInYears($value) < 19) {
+                if (now()->diffInYears($value) > 19) {
                     $fail('The customer must be at least 19 years old.');
                 }
             }],
