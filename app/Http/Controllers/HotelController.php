@@ -11,16 +11,21 @@ class HotelController extends Controller
     public function index()
     {
         $hotels = Hotel::all();
-        return response()->json($hotels);
+        return view('hotels.index', compact('hotels'));
     }
 
     public function show($id)
     {
         $hotel = Hotel::find($id);
         if (!$hotel) {
-            return response()->json(['message' => 'Hotel not found'], 404);
+            return redirect()->route('hotels.index')->with('error', 'Hotel not found');
         }
-        return response()->json($hotel);
+        return view('hotels.show', compact('hotel'));
+    }
+
+    public function create()
+    {
+        return view('hotels.create');
     }
 
     public function store(Request $request)
@@ -33,18 +38,29 @@ class HotelController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json($validator->errors(), 400);
+            return redirect()->route('hotels.create')
+                             ->withErrors($validator)
+                             ->withInput();
         }
 
         $hotel = Hotel::create($request->all());
-        return response()->json($hotel, 201);
+        return redirect()->route('hotels.index')->with('success', 'Hotel created successfully');
+    }
+
+    public function edit($id)
+    {
+        $hotel = Hotel::find($id);
+        if (!$hotel) {
+            return redirect()->route('hotels.index')->with('error', 'Hotel not found');
+        }
+        return view('hotels.edit', compact('hotel'));
     }
 
     public function update(Request $request, $id)
     {
         $hotel = Hotel::find($id);
         if (!$hotel) {
-            return response()->json(['message' => 'Hotel not found'], 404);
+            return redirect()->route('hotels.index')->with('error', 'Hotel not found');
         }
 
         $validator = Validator::make($request->all(), [
@@ -55,21 +71,23 @@ class HotelController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json($validator->errors(), 400);
+            return redirect()->route('hotels.edit', $id)
+                             ->withErrors($validator)
+                             ->withInput();
         }
 
         $hotel->update($request->all());
-        return response()->json($hotel, 200);
+        return redirect()->route('hotels.index')->with('success', 'Hotel updated successfully');
     }
 
     public function destroy($id)
     {
         $hotel = Hotel::find($id);
         if (!$hotel) {
-            return response()->json(['message' => 'Hotel not found'], 404);
+            return redirect()->route('hotels.index')->with('error', 'Hotel not found');
         }
 
         $hotel->delete();
-        return response()->json(null, 204);
+        return redirect()->route('hotels.index')->with('success', 'Hotel deleted successfully');
     }
 }
