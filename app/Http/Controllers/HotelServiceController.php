@@ -2,70 +2,55 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\RoomPhoto;
+use App\Models\HotelService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 
-class RoomPhotoController extends Controller
+class HotelServiceController extends Controller
 {
+    // Display a listing of the resource.
     public function index()
     {
-        $roomPhotos = RoomPhoto::all();
-        return response()->json($roomPhotos);
+        $hotelServices = HotelService::all();
+        return view('hotel_services.index', compact('hotelServices'));
     }
 
-    public function show($id)
-    {
-        $roomPhoto = RoomPhoto::find($id);
-        if (!$roomPhoto) {
-            return response()->json(['message' => 'Room Photo not found'], 404);
-        }
-        return response()->json($roomPhoto);
-    }
-
+    // Store a newly created resource in storage.
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'photo_url' => 'required|url',
-            'room_id' => 'required|exists:rooms,id',
+        $validatedData = $request->validate([
+            'hotel_id' => 'required|exists:hotels,id',
+            'service_id' => 'required|exists:services,id',
         ]);
 
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 400);
-        }
-
-        $roomPhoto = RoomPhoto::create($request->all());
-        return response()->json($roomPhoto, 201);
+        $hotelService = HotelService::create($validatedData);
+        return redirect()->route('hotel_services.index')->with('success', 'Hotel Service created successfully');
     }
 
+    // Display the specified resource.
+    public function show($id)
+    {
+        $hotelService = HotelService::findOrFail($id);
+        return view('hotel_services.show', compact('hotelService'));
+    }
+
+    // Update the specified resource in storage.
     public function update(Request $request, $id)
     {
-        $roomPhoto = RoomPhoto::find($id);
-        if (!$roomPhoto) {
-            return response()->json(['message' => 'Room Photo not found'], 404);
-        }
-
-        $validator = Validator::make($request->all(), [
-            'photo_url' => 'sometimes|required|url',
-            'room_id' => 'sometimes|required|exists:rooms,id',
+        $validatedData = $request->validate([
+            'hotel_id' => 'required|exists:hotels,id',
+            'service_id' => 'required|exists:services,id',
         ]);
 
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 400);
-        }
-
-        $roomPhoto->update($request->all());
-        return response()->json($roomPhoto, 200);
+        $hotelService = HotelService::findOrFail($id);
+        $hotelService->update($validatedData);
+        return redirect()->route('hotel_services.index')->with('success', 'Hotel Service updated successfully');
     }
 
+    // Remove the specified resource from storage.
     public function destroy($id)
     {
-        $roomPhoto = RoomPhoto::find($id);
-        if (!$roomPhoto) {
-            return response()->json(['message' => 'Room Photo not found'], 404);
-        }
-
-        $roomPhoto->delete();
-        return response()->json(null, 204);
+        $hotelService = HotelService::findOrFail($id);
+        $hotelService->delete();
+        return redirect()->route('hotel_services.index')->with('success', 'Hotel Service deleted successfully');
     }
 }
