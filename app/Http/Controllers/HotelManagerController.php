@@ -11,16 +11,21 @@ class HotelManagerController extends Controller
     public function index()
     {
         $hotelManagers = HotelManager::all();
-        return response()->json($hotelManagers);
+        return view('hotel_managers.index', compact('hotelManagers'));
     }
 
     public function show($id)
     {
         $hotelManager = HotelManager::find($id);
         if (!$hotelManager) {
-            return response()->json(['message' => 'Hotel Manager not found'], 404);
+            return redirect()->route('hotel_managers.index')->with('error', 'Hotel Manager not found');
         }
-        return response()->json($hotelManager);
+        return view('hotel_managers.show', compact('hotelManager'));
+    }
+
+    public function create()
+    {
+        return view('hotel_managers.create');
     }
 
     public function store(Request $request)
@@ -32,7 +37,9 @@ class HotelManagerController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json($validator->errors(), 400);
+            return redirect()->route('hotel_managers.create')
+                             ->withErrors($validator)
+                             ->withInput();
         }
 
         $hotelManager = HotelManager::create([
@@ -41,14 +48,23 @@ class HotelManagerController extends Controller
             'password' => bcrypt($request->password),
         ]);
 
-        return response()->json($hotelManager, 201);
+        return redirect()->route('hotel_managers.index')->with('success', 'Hotel Manager created successfully');
+    }
+
+    public function edit($id)
+    {
+        $hotelManager = HotelManager::find($id);
+        if (!$hotelManager) {
+            return redirect()->route('hotel_managers.index')->with('error', 'Hotel Manager not found');
+        }
+        return view('hotel_managers.edit', compact('hotelManager'));
     }
 
     public function update(Request $request, $id)
     {
         $hotelManager = HotelManager::find($id);
         if (!$hotelManager) {
-            return response()->json(['message' => 'Hotel Manager not found'], 404);
+            return redirect()->route('hotel_managers.index')->with('error', 'Hotel Manager not found');
         }
 
         $validator = Validator::make($request->all(), [
@@ -58,7 +74,9 @@ class HotelManagerController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json($validator->errors(), 400);
+            return redirect()->route('hotel_managers.edit', $id)
+                             ->withErrors($validator)
+                             ->withInput();
         }
 
         $hotelManager->update($request->all());
@@ -67,17 +85,17 @@ class HotelManagerController extends Controller
             $hotelManager->save();
         }
 
-        return response()->json($hotelManager, 200);
+        return redirect()->route('hotel_managers.index')->with('success', 'Hotel Manager updated successfully');
     }
 
     public function destroy($id)
     {
         $hotelManager = HotelManager::find($id);
         if (!$hotelManager) {
-            return response()->json(['message' => 'Hotel Manager not found'], 404);
+            return redirect()->route('hotel_managers.index')->with('error', 'Hotel Manager not found');
         }
 
         $hotelManager->delete();
-        return response()->json(null, 204);
+        return redirect()->route('hotel_managers.index')->with('success', 'Hotel Manager deleted successfully');
     }
 }
