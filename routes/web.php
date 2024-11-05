@@ -17,7 +17,7 @@ use App\Http\Controllers\HotelServiceController;
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('home');
 
 Route::resource('admins', AdminController::class);
 Route::resource('hotel-managers', HotelManagerController::class);
@@ -32,3 +32,5 @@ Route::resource('reservation-rooms', ReservationRoomController::class);
 Route::resource('hotel-photos', HotelPhotoController::class);
 Route::resource('room-photos', RoomPhotoController::class);
 Route::resource('hotel-services', HotelServiceController::class);
+
+Route::view('register', "auth.register")->name('register');

@@ -4,31 +4,48 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Connexion</title>
-        <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="{{ asset('style.css') }}">
     </head>
     <body>
         <header>
             <h1>Connexion / Inscription</h1>
             <nav>
-                <a href="Home.html" class="register-btn">Home</a>
+                <a href="{{ route('home') }}" class="register-btn">Home</a>
             </nav>
         </header>
 
+
         <main class="main content">
             <div class="div">
-                <form class ="signUpForm"id="login-form">
-                    <label for ="id">Pseudo :</label>
-                    <input type="text" id="username" name="username" required>
+                <form class="signUpForm" id="login-form" method="POST" action="{{ route('customers.store') }}">
+                    @csrf
+                    @csrf
+                    <label for="username">Pseudo :</label>
+                    <input type="text" id="username" name="username" value="{{ old('username') }}" required>
+                    @error('username')
+                        <div class="alert alert-danger">{{ $message }}</div>
+                    @enderror
+
                     <label for="email">E-mail :</label>
-                    <input type="email" id="email" name="email" required>
+                    <input type="email" id="email" name="email" value="{{ old('email') }}" required>
+                    @error('email')
+                        <div class="alert alert-danger">{{ $message }}</div>
+                    @enderror
+
+                    <label for="birth_date">Birthdate :</label>
+                    <input type="date" id="birth_date" name="birth_date" value="{{ old('birth_date') }}" required>
+                    @error('birth_date')
+                        <div class="alert alert-danger">{{ $message }}</div>
+                    @enderror
+
                     <label for="password">Password :</label>
-                    <input type="password" id="password" name="password"
-                        required>
-                    <label for="email" >Password validation :</label>
-                    <input type="password" id="email_validation" name="email_validation" required>
+                    <input type="password" id="password" name="password" required>
+                    @error('password')
+                        <div class="alert alert-danger">{{ $message }}</div>
+                    @enderror
                     <button type="submit">create account</button>
                 </form>
-                <p>Already registered? <a href="Login.html">Login here</a></p>
+                <p>Already registered? <a href="#">Login here</a></p>
             </div>
         </main>
 
@@ -39,7 +56,7 @@
             </div>
             <div class="footer-links">
                 <h4>Quick Links</h4>
-                <a href="#">Home</a>
+                <a href="{{ route('home') }}">Home</a>
                 <a href="#">View Hotels</a>
                 <a href="#">Contact Us</a>
             </div>

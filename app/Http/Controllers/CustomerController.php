@@ -25,7 +25,7 @@ class CustomerController extends Controller
 
     public function create()
     {
-        return view('customers.create');
+        return view('auth/register');
     }
 
     public function store(Request $request)
@@ -35,7 +35,8 @@ class CustomerController extends Controller
             'email' => 'required|email|unique:customers|max:255',
             'password' => 'required|min:6',
             'birth_date' => ['required', 'date', function ($attribute, $value, $fail) {
-                if (now()->diffInYears($value) > 19) {
+
+                if (abs(now()->diffInYears($value)) < 19) {
                     $fail('The customer must be at least 19 years old.');
                 }
             }],
@@ -54,7 +55,7 @@ class CustomerController extends Controller
             'birth_date' => $request->birth_date,
         ]);
     
-        return redirect()->route('customers.index')->with('success', 'Customer created successfully');
+        return redirect()->route('home')->with('success', 'Customer created successfully');
     }
 
     public function edit($id)
@@ -78,7 +79,7 @@ class CustomerController extends Controller
             'email' => 'sometimes|required|email|unique:customers,email,' . $id . '|max:255',
             'password' => 'sometimes|required|min:6',
             'birth_date' => ['sometimes', 'required', 'date', function ($attribute, $value, $fail) {
-                if (now()->diffInYears($value) > 19) {
+                if (abs(now()->diffInYears($value)) < 19) {
                     $fail('The customer must be at least 19 years old.');
                 }
             }],
