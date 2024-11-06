@@ -14,6 +14,7 @@ use App\Http\Controllers\ReservationRoomController;
 use App\Http\Controllers\HotelPhotoController;
 use App\Http\Controllers\RoomPhotoController;
 use App\Http\Controllers\HotelServiceController;
+use App\Http\Controllers\AuthController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -34,3 +35,9 @@ Route::resource('room-photos', RoomPhotoController::class);
 Route::resource('hotel-services', HotelServiceController::class);
 
 Route::view('register', "auth.register")->name('register');
+
+
+
+Route::get('login', [AuthController::class, 'showLoginForm'])->name('login');
+Route::post('login', [AuthController::class, 'login']);
+Route::post('logout', [AuthController::class, 'logout'])->name('logout');
