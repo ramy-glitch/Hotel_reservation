@@ -13,7 +13,6 @@ use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\ReservationRoomController;
 use App\Http\Controllers\HotelPhotoController;
 use App\Http\Controllers\RoomPhotoController;
-use App\Http\Controllers\HotelServiceController;
 use App\Http\Controllers\AuthController;
 
 Route::get('/', function () {
@@ -36,7 +35,6 @@ Route::middleware('auth:admin')->group(function () {
     Route::resource('notifications', NotificationController::class);
     Route::resource('hotel-photos', HotelPhotoController::class);
     Route::resource('room-photos', RoomPhotoController::class);
-    Route::resource('hotel-services', HotelServiceController::class);
 });
 
 // Hotel Manager Routes
@@ -46,7 +44,6 @@ Route::middleware('auth:hotel_manager')->group(function () {
     Route::resource('reservation-rooms', ReservationRoomController::class);
     Route::resource('hotel-photos', HotelPhotoController::class);
     Route::resource('room-photos', RoomPhotoController::class);
-    Route::resource('hotel-services', HotelServiceController::class);
 });
 
 // Customer Routes

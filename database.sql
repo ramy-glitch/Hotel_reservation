@@ -118,6 +118,8 @@ CREATE TABLE reservation_rooms (
     reservation_id INTEGER,
     room_id INTEGER,
     room_price DOUBLE NOT NULL,
+    created_at TIMESTAMP NULL DEFAULT NULL,
+    updated_at TIMESTAMP NULL DEFAULT NULL,
     PRIMARY KEY (reservation_id, room_id),
     FOREIGN KEY (reservation_id) REFERENCES reservations(id),
     FOREIGN KEY (room_id) REFERENCES rooms(id)
@@ -143,10 +145,3 @@ CREATE TABLE room_photos (
     FOREIGN KEY (room_id) REFERENCES rooms(id)
 );
 
-CREATE TABLE hotel_services (
-    hotel_id INTEGER,
-    service_id INTEGER,
-    PRIMARY KEY (hotel_id, service_id),
-    FOREIGN KEY (hotel_id) REFERENCES hotels(id),
-    FOREIGN KEY (service_id) REFERENCES services(id)
-);

@@ -14,11 +14,11 @@ class Service extends Model
         'description',
         'availability',
         'cost',
+        'hotel_id',
     ];
 
-
-    public function hotels()
+    public function hotel()
     {
-        return $this->belongsToMany(Hotel::class, 'hotel_services');
+        return $this->belongsTo(Hotel::class);
     }
 }
