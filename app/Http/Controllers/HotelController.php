@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Hotel;
+use App\Models\Room;
+use App\Models\Service;
+use App\Models\Review;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -89,5 +92,44 @@ class HotelController extends Controller
 
         $hotel->delete();
         return redirect()->route('hotels.index')->with('success', 'Hotel deleted successfully');
+    }
+
+    public function getHotelDetails($id)
+    {
+        $hotel = Hotel::find($id);
+        if (!$hotel) {
+            return redirect()->route('hotels.index')->with('error', 'Hotel not found');
+        }
+        return view('hotels.details', compact('hotel'));
+    }
+
+    public function getRooms($id)
+    {
+        $hotel = Hotel::find($id);
+        if (!$hotel) {
+            return redirect()->route('hotels.index')->with('error', 'Hotel not found');
+        }
+        $rooms = Room::where('hotel_id', $id)->get();
+        return view('rooms.index', compact('rooms', 'hotel'));
+    }
+
+    public function getServices($id)
+    {
+        $hotel = Hotel::find($id);
+        if (!$hotel) {
+            return redirect()->route('hotels.index')->with('error', 'Hotel not found');
+        }
+        $services = Service::where('hotel_id', $id)->get();
+        return view('services.index', compact('services', 'hotel'));
+    }
+
+    public function getReviews($id)
+    {
+        $hotel = Hotel::find($id);
+        if (!$hotel) {
+            return redirect()->route('hotels.index')->with('error', 'Hotel not found');
+        }
+        $reviews = Review::where('hotel_id', $id)->get();
+        return view('reviews.index', compact('reviews', 'hotel'));
     }
 }
