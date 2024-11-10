@@ -155,8 +155,8 @@ class HotelManagerController extends Controller
 
         if ($validator->fails()) {
             return redirect()->route('rooms.edit', $roomId)
-                             ->withErrors($validator)
-                             ->withInput();
+                            ->withErrors($validator)
+                            ->withInput();
         }
 
         $room->update($request->all());
@@ -190,8 +190,8 @@ class HotelManagerController extends Controller
 
         if ($validator->fails()) {
             return redirect()->route('services.create')
-                             ->withErrors($validator)
-                             ->withInput();
+                            ->withErrors($validator)
+                            ->withInput();
         }
 
         $service = Service::create([
