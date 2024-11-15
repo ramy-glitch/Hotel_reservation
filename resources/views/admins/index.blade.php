@@ -12,6 +12,13 @@
     @if (session('error'))
         <div>{{ session('error') }}</div>
     @endif
+
+    <!-- Logout Button -->
+    <form action="{{ route('logout') }}" method="POST" style="display:inline;">
+        @csrf
+        <button type="submit">Logout</button>
+    </form>
+
     <ul>
         @foreach ($admins as $admin)
             <li>
