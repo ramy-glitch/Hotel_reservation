@@ -4,13 +4,13 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Connexion</title>
-        <link rel="stylesheet" href="{{ asset('style.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/style.css') }}">
     </head>
     <body>
         <header>
             <h1>Connexion / Inscription</h1>
             <nav>
-                <a href="{{ route('home') }}" class="register-btn">Home</a>
+                <a href="{{ route('welcome') }}" class="register-btn">Home</a>
             </nav>
         </header>
 
@@ -18,7 +18,6 @@
         <main class="main content">
             <div class="div">
                 <form class="signUpForm" id="login-form" method="POST" action="{{ route('customers.store') }}">
-                    @csrf
                     @csrf
                     <label for="username">Pseudo :</label>
                     <input type="text" id="username" name="username" value="{{ old('username') }}" required>
@@ -45,7 +44,7 @@
                     @enderror
                     <button type="submit">create account</button>
                 </form>
-                <p>Already registered? <a href="#">Login here</a></p>
+                <p>Already registered? <a href="{{ route('login') }}">Login here</a></p>
             </div>
         </main>
 
@@ -56,7 +55,7 @@
             </div>
             <div class="footer-links">
                 <h4>Quick Links</h4>
-                <a href="{{ route('home') }}">Home</a>
+                <a href="{{ route('welcome') }}">Home</a>
                 <a href="#">View Hotels</a>
                 <a href="#">Contact Us</a>
             </div>

@@ -17,7 +17,7 @@ use App\Http\Controllers\AuthController;
 
 Route::get('/', function () {
     return view('welcome');
-})->name('home');
+})->name('welcome');
 
 // Authentication Routes
 Route::get('login', [AuthController::class, 'showLoginForm'])->name('login');
@@ -25,6 +25,8 @@ Route::post('login', [AuthController::class, 'login']);
 Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 Route::view('register', "auth.register")->name('register');
 
+// Customer Routes
+Route::resource ('customers', CustomerController::class) ->only(['create', 'store']);
 // Admin Routes
 Route::middleware('auth:admin')->group(function () {
     Route::resource('admins', AdminController::class);

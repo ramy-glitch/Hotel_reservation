@@ -4,13 +4,13 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Connexion</title>
-        <link rel="stylesheet" href="{{ asset('style.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/style.css') }}">
     </head>
     <body>
         <header>
             <h1>Connexion / Inscription</h1>
             <nav>
-                <a href="{{ route('home') }}" class="register-btn">Home</a>
+                <a href="{{ route('welcome') }}" class="register-btn">Home</a>
             </nav>
         </header>
 
@@ -35,7 +35,7 @@
             </div>
             <div class="footer-links">
                 <h4>Quick Links</h4>
-                <a href="{{ route('home') }}">Home</a>
+                <a href="{{ route('welcome') }}">Home</a>
                 <a href="#">View Hotels</a>
                 <a href="#">Contact Us</a>
             </div>

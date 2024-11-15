@@ -19,7 +19,7 @@ class AuthController extends Controller
         if (Auth::guard('customer')->attempt($credentials)) {
             return redirect()->intended('home')->with('success', 'Logged in successfully as Customer');
         } elseif (Auth::guard('admin')->attempt($credentials)) {
-            return redirect()->intended('home')->with('success', 'Logged in successfully as Admin');
+            return redirect()->intended('admins')->with('success', 'Logged in successfully as Admin');
         } elseif (Auth::guard('hotel_manager')->attempt($credentials)) {
             return redirect()->intended('home')->with('success', 'Logged in successfully as Hotel Manager');
         }

@@ -12,10 +12,10 @@
         <div class="logo">HotelBooking</div>
         <nav>
 
-            <a href="#hero">Home</a>
+            <a href="{{ route('welcome') }}">Home</a>
             <a href="#">About Us</a>
-            <a href="Login.html" class="login-btn">Login</a>
-            <a href="signUp.html" class="register-btn">Register</a>
+            <a href="{{ route('login') }}" class="login-btn">Login</a>
+            <a href="{{ route('register') }}" class="register-btn">Register</a>
 
         </nav>
     </header>
@@ -63,7 +63,7 @@
         </div>
         <div class="footer-links">
             <h4>Quick Links</h4>
-            <a href="#">Home</a>
+            <a href="{{ route('welcome') }}">Home</a>
             <a href="#">View Hotels</a>
             <a href="#">Contact Us</a>
         </div>
