@@ -3,111 +3,112 @@
 namespace App\Http\Controllers;
 
 use App\Models\Customer;
+use App\Models\Hotel;
+use App\Models\Reservation;
+use App\Models\Notification;
+use App\Models\Review;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class CustomerController extends Controller
 {
-    public function index()
-    {
-        $customers = Customer::all();
-        return view('customers.index', compact('customers'));
-    }
-
-    public function show($id)
-    {
-        $customer = Customer::find($id);
-        if (!$customer) {
-            return redirect()->route('customers.index')->with('error', 'Customer not found');
-        }
-        return view('customers.show', compact('customer'));
-    }
-
-    public function create()
-    {
-        return view('auth/register');
-    }
-
-    public function store(Request $request)
+    public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'username' => 'required|unique:customers|max:255',
-            'email' => 'required|email|unique:customers|max:255',
-            'password' => 'required|min:6',
-            'birth_date' => ['required', 'date', function ($attribute, $value, $fail) {
-
-                if (abs(now()->diffInYears($value)) < 19) {
-                    $fail('The customer must be at least 19 years old.');
-                }
-            }],
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:customers',
+            'password' => 'required|string|min:8|confirmed',
         ]);
-    
+
         if ($validator->fails()) {
-            return redirect()->route('customers.create')
-                             ->withErrors($validator)
-                             ->withInput();
+            return response()->json($validator->errors(), 400);
         }
-    
+
         $customer = Customer::create([
-            'username' => $request->username,
+            'name' => $request->name,
             'email' => $request->email,
             'password' => bcrypt($request->password),
-            'birth_date' => $request->birth_date,
         ]);
-    
-        return redirect()->route('home')->with('success', 'Customer created successfully');
+
+        return response()->json(['success' => true, 'customer' => $customer], 201);
     }
 
-    public function edit($id)
+    public function login(Request $request)
     {
-        $customer = Customer::find($id);
-        if (!$customer) {
-            return redirect()->route('customers.index')->with('error', 'Customer not found');
+        $credentials = $request->only('email', 'password');
+
+        if (Auth::guard('customer')->attempt($credentials)) {
+            return response()->json(['success' => true], 200);
         }
-        return view('customers.edit', compact('customer'));
+
+        return response()->json(['success' => false, 'message' => 'Invalid credentials'], 401);
     }
 
-    public function update(Request $request, $id)
+    public function searchHotels($criteria)
     {
-        $customer = Customer::find($id);
-        if (!$customer) {
-            return redirect()->route('customers.index')->with('error', 'Customer not found');
-        }
-    
+        $hotels = Hotel::where('hotelname', 'like', '%' . $criteria . '%')
+                        ->orWhere('location', 'like', '%' . $criteria . '%')
+                        ->get();
+
+        return response()->json($hotels, 200);
+    }
+
+    public function makeReservation(Request $request, $hotelId)
+    {
         $validator = Validator::make($request->all(), [
-            'username' => 'sometimes|required|unique:customers,username,' . $id . '|max:255',
-            'email' => 'sometimes|required|email|unique:customers,email,' . $id . '|max:255',
-            'password' => 'sometimes|required|min:6',
-            'birth_date' => ['sometimes', 'required', 'date', function ($attribute, $value, $fail) {
-                if (abs(now()->diffInYears($value)) < 19) {
-                    $fail('The customer must be at least 19 years old.');
-                }
-            }],
+            'check_in_date' => 'required|date',
+            'check_out_date' => 'required|date',
+            'room_details' => 'required|string',
         ]);
-    
+
         if ($validator->fails()) {
-            return redirect()->route('customers.edit', $id)
-                             ->withErrors($validator)
-                             ->withInput();
+            return response()->json($validator->errors(), 400);
         }
-    
-        $customer->update($request->all());
-        if ($request->has('password')) {
-            $customer->password = bcrypt($request->password);
-            $customer->save();
+
+        $reservation = Reservation::create([
+            'check_in_date' => $request->check_in_date,
+            'check_out_date' => $request->check_out_date,
+            'customer_id' => Auth::id(),
+            'hotel_id' => $hotelId,
+            'status' => 'pending',
+            'number_of_adults' => $request->number_of_adults,
+            'number_of_children' => $request->number_of_children,
+        ]);
+
+        // Assuming room_details is a JSON string with room_id and room_price
+        $roomDetails = json_decode($request->room_details, true);
+        foreach ($roomDetails as $roomDetail) {
+            $reservation->rooms()->attach($roomDetail['room_id'], ['room_price' => $roomDetail['room_price']]);
         }
-    
-        return redirect()->route('customers.index')->with('success', 'Customer updated successfully');
+
+        return response()->json($reservation, 201);
     }
 
-    public function destroy($id)
+    public function receiveNotification()
     {
-        $customer = Customer::find($id);
-        if (!$customer) {
-            return redirect()->route('customers.index')->with('error', 'Customer not found');
+        $notifications = Notification::where('customer_id', Auth::id())->get();
+        return response()->json($notifications, 200);
+    }
+
+    public function leaveReview(Request $request, $hotelId)
+    {
+        $validator = Validator::make($request->all(), [
+            'rating' => 'required|integer|min:1|max:5',
+            'comment' => 'nullable|string',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 400);
         }
 
-        $customer->delete();
-        return redirect()->route('customers.index')->with('success', 'Customer deleted successfully');
+        $review = Review::create([
+            'rating' => $request->rating,
+            'review_comment' => $request->comment,
+            'customer_id' => Auth::id(),
+            'hotel_id' => $hotelId,
+        ]);
+
+        return response()->json($review, 201);
     }
 }
