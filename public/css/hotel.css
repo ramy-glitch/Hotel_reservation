@@ -1,0 +1,254 @@
+/* Reset and Basic Styling */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f4f8;
+    color: #333;
+}
+
+.dashboard-container {
+    display: flex;
+    height: 100vh;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 220px;
+    background-color: #2d2d42;
+    color: #ffffff;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.sidebar-logo {
+    font-size: 1.4rem;
+    margin-bottom: 30px;
+    color: #f1f1f1;
+    text-align: center;
+    width: 100%;
+}
+
+.sidebar-menu {
+    list-style: none;
+    width: 100%;
+}
+
+.sidebar-menu li {
+    width: 100%;
+    margin: 10px 0;
+}
+
+.nav-link {
+    display: block;
+    padding: 10px 20px;
+    color: #d1d1e9;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.nav-link.active,
+.nav-link:hover {
+    background-color: #464667;
+    color: #ffffff;
+}
+
+/* Main Content */
+.main-content {
+    flex: 1;
+    padding: 20px 40px;
+    overflow-y: auto;
+}
+
+/* Hotels Page Specific Styling */
+.section h3 {
+    font-size: 2rem;
+    color: #333;
+    margin-bottom: 25px;
+    border-bottom: 2px solid #00aaff;
+    padding-bottom: 5px;
+}
+
+/* Filter Bar */
+.filter-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.search-bar, .filter {
+    padding: 8px 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+    flex: 1;
+}
+
+.filter-button {
+    background-color: #00aaff;
+    color: #fff;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.filter-button:hover {
+    background-color: #008ecc;
+}
+
+/* Hotel Cards Grid */
+.hotel-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+/* Hotel Card Styling */
+.hotel-card {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.hotel-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.hotel-card img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+}
+
+.hotel-info {
+    padding: 15px;
+    text-align: center;
+}
+
+.hotel-info h4 {
+    font-size: 1.4rem;
+    color: #333;
+    margin-bottom: 8px;
+}
+
+.hotel-info p {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 10px;
+}
+
+.rating {
+    font-size: 1.1rem;
+    color: #ffb400;
+}
+
+.details-button {
+    background-color: #00aaff;
+    color: #fff;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background-color 0.3s;
+}
+
+.details-button:hover {
+    background-color: #008ecc;
+}
+
+/* Filter Bar Responsive */
+.filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.filter-bar select,
+.filter-bar input[type="text"],
+.filter-bar input[type="number"],
+.filter-bar input[type="date"],
+.filter-button {
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+.filter-button {
+    background-color: #00aaff;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.filter-button:hover {
+    background-color: #008ecc;
+}
+
+/* Responsive Media Queries */
+@media (max-width: 768px) {
+    .dashboard-container {
+        flex-direction: column;
+    }
+    
+    .sidebar {
+        width: 100%;
+        padding: 10px;
+        align-items: center;
+    }
+
+    .main-content {
+        padding: 15px;
+    }
+
+    .hotel-grid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    }
+}
+
+@media (max-width: 480px) {
+    .section h3 {
+        font-size: 1.6rem;
+    }
+
+    .sidebar-logo {
+        font-size: 1.2rem;
+    }
+
+    .nav-link {
+        padding: 8px 15px;
+        font-size: 0.9rem;
+    }
+
+    .filter-bar {
+        flex-direction: column;
+    }
+
+    .filter-bar select, .filter-bar input[type="text"], .filter-bar input[type="number"], .filter-bar input[type="date"], .filter-button {
+        width: 100%;
+    }
+
+    .hotel-info h4 {
+        font-size: 1.2rem;
+    }
+
+    .hotel-info p {
+        font-size: 0.8rem;
+    }
+}

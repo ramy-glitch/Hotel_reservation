@@ -14,15 +14,12 @@ class HotelController extends Controller
     public function index()
     {
         $hotels = Hotel::all();
-        return view('hotels.index', compact('hotels'));
+        return view('customers.hotels', compact('hotels'));
     }
 
     public function show($id)
     {
-        $hotel = Hotel::find($id);
-        if (!$hotel) {
-            return redirect()->route('hotels.index')->with('error', 'Hotel not found');
-        }
+        $hotel = Hotel::findOrFail($id);
         return view('hotels.show', compact('hotel'));
     }
 
@@ -96,40 +93,35 @@ class HotelController extends Controller
 
     public function getHotelDetails($id)
     {
-        $hotel = Hotel::find($id);
-        if (!$hotel) {
-            return redirect()->route('hotels.index')->with('error', 'Hotel not found');
-        }
+        $hotel = Hotel::findOrFail($id);
         return view('hotels.details', compact('hotel'));
     }
 
     public function getRooms($id)
     {
-        $hotel = Hotel::find($id);
-        if (!$hotel) {
-            return redirect()->route('hotels.index')->with('error', 'Hotel not found');
-        }
-        $rooms = Room::where('hotel_id', $id)->get();
-        return view('rooms.index', compact('rooms', 'hotel'));
+        $hotel = Hotel::findOrFail($id);
+        $rooms = $hotel->rooms;
+        return view('hotels.rooms', compact('rooms'));
     }
 
     public function getServices($id)
     {
-        $hotel = Hotel::find($id);
-        if (!$hotel) {
-            return redirect()->route('hotels.index')->with('error', 'Hotel not found');
-        }
-        $services = Service::where('hotel_id', $id)->get();
-        return view('services.index', compact('services', 'hotel'));
+        $hotel = Hotel::findOrFail($id);
+        $services = $hotel->services;
+        return view('hotels.services', compact('services'));
     }
 
     public function getReviews($id)
     {
-        $hotel = Hotel::find($id);
-        if (!$hotel) {
-            return redirect()->route('hotels.index')->with('error', 'Hotel not found');
-        }
-        $reviews = Review::where('hotel_id', $id)->get();
-        return view('reviews.index', compact('reviews', 'hotel'));
+        $hotel = Hotel::findOrFail($id);
+        $reviews = $hotel->reviews;
+        return view('hotels.reviews', compact('reviews'));
+    }
+
+    public function addPhoto(Request $request, $id)
+    {
+        $hotel = Hotel::findOrFail($id);
+        // Handle photo upload logic here
+        return redirect()->route('hotels.show', $id)->with('success', 'Photo added successfully');
     }
 }

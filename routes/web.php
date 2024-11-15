@@ -26,10 +26,7 @@ Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 Route::view('register', "auth.register")->name('register');
 
 // Customer registration Route
-Route::resource ('customers', CustomerController::class) ->only(['store']);
-
-
-
+Route::resource('customers', CustomerController::class)->only(['store']);
 
 // Admin Routes
 Route::middleware('auth:admin')->group(function () {
@@ -82,9 +79,8 @@ Route::middleware('auth:hotel_manager')->group(function () {
 
 // Customer Routes
 Route::middleware('auth:customer')->group(function () {
-
-    Route::resource ('customers', CustomerController::class) ->only(['show', 'update', 'destroy']);
-
+    Route::get('dashboard', [CustomerController::class, 'dashboard'])->name('customer.dashboard');
+    Route::get('hotels', [CustomerController::class, 'searchHotels'])->name('hotels.search');
     Route::resource('reservations', ReservationController::class);
     Route::resource('rooms', RoomController::class);
     Route::resource('reviews', ReviewController::class);
