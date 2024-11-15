@@ -82,6 +82,9 @@ Route::middleware('auth:hotel_manager')->group(function () {
 
 // Customer Routes
 Route::middleware('auth:customer')->group(function () {
+
+    Route::resource ('customers', CustomerController::class) ->only(['show', 'update', 'destroy']);
+
     Route::resource('reservations', ReservationController::class);
     Route::resource('rooms', RoomController::class);
     Route::resource('reviews', ReviewController::class);
