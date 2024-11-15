@@ -25,8 +25,12 @@ Route::post('login', [AuthController::class, 'login']);
 Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 Route::view('register', "auth.register")->name('register');
 
-// Customer Routes
-Route::resource ('customers', CustomerController::class) ->only(['create', 'store']);
+// Customer registration Route
+Route::resource ('customers', CustomerController::class) ->only(['store']);
+
+
+
+
 // Admin Routes
 Route::middleware('auth:admin')->group(function () {
     Route::resource('admins', AdminController::class);
