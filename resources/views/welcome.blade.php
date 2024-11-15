@@ -39,20 +39,17 @@
         <p>Explore our selection of popular hotels in various cities.</p>
         
         <div class="hotels">
-            <div class="hotel">
-                <img src="hotel1.jpg" alt="Hotel 1">
-                <p>$150/night</p>
-                <h3>Ocean View Hotel</h3>
-                <p>Miami Beach, Florida</p>
-            </div>
-            <div class="hotel">
-                <img src="hotel2.jpg" alt="Hotel 2">
-                <p>$200/night</p>
-                <h3>Mountain Retreat</h3>
-                <p>Lake Tahoe, California</p>
-            </div>
-         
+
+        @foreach ($hotels as $hotel)    
+    <div class="hotel">
+        <img src="{{ $hotel->photos->first()->url ?? 'default-image.jpg' }}" alt="{{ $hotel->hotelname }}">
+            <p>${{ $hotel->rooms->first()->price ?? 'N/A' }}/night</p>
+            <h3>{{ $hotel->hotelname }}</h3>
+            <p>{{ $hotel->location }}</p>
         </div>
+        @endforeach
+        
+    </div>
     </section>
 
     <!-- Footer Section -->

@@ -16,7 +16,11 @@ use App\Http\Controllers\RoomPhotoController;
 use App\Http\Controllers\AuthController;
 
 Route::get('/', function () {
-    return view('welcome');
+    $hotels = App\Models\Hotel::all();
+    $reviews = App\Models\Review::all();
+    $rooms = App\Models\Room::all();
+
+    return view('welcome',compact('hotels','reviews','rooms'));
 })->name('welcome');
 
 // Authentication Routes
@@ -80,7 +84,7 @@ Route::middleware('auth:hotel_manager')->group(function () {
 // Customer Routes
 Route::middleware('auth:customer')->group(function () {
     Route::get('dashboard', [CustomerController::class, 'dashboard'])->name('customer.dashboard');
-    Route::get('hotels', [CustomerController::class, 'searchHotels'])->name('hotels.search');
+    Route::get('hotels', [HotelController::class, 'index'])->name('hotels.index');
     Route::resource('reservations', ReservationController::class);
     Route::resource('rooms', RoomController::class);
     Route::resource('reviews', ReviewController::class);
@@ -88,8 +92,10 @@ Route::middleware('auth:customer')->group(function () {
 });
 
 // Hotel Routes
+/*
 Route::resource('hotels', HotelController::class);
 Route::get('hotels/{id}/details', [HotelController::class, 'getHotelDetails'])->name('hotels.details');
 Route::get('hotels/{id}/rooms', [HotelController::class, 'getRooms'])->name('hotels.rooms');
 Route::get('hotels/{id}/services', [HotelController::class, 'getServices'])->name('hotels.services');
 Route::get('hotels/{id}/reviews', [HotelController::class, 'getReviews'])->name('hotels.reviews');
+*/

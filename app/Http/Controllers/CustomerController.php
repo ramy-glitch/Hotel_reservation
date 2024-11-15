@@ -20,20 +20,15 @@ class CustomerController extends Controller
         return view('customers.userDash', compact('customer'));
     }
 
-    public function index()
-    {
-        $customers = Customer::all();
-        return response()->json($customers, 200);
-    }
 
     public function show($id)
     {
         $customer = Customer::find($id);
         if (!$customer) {
-            return response()->json(['message' => 'Customer not found'], 404);
+            return redirect()->back()->with('error', 'Customer not found');
         }
 
-        return response()->json($customer, 200);
+        return view('customers.show', compact('customer'));
     }
 
 
@@ -46,7 +41,7 @@ class CustomerController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json($validator->errors(), 400);
+            return redirect()->back()->withErrors($validator)->withInput();
         }
 
         $customer = Customer::create([
@@ -55,7 +50,7 @@ class CustomerController extends Controller
             'password' => bcrypt($request->password),
         ]);
 
-        return response()->json($customer, 201);
+        return redirect()->route('customers.show', $customer->id)->with('success', 'Customer created successfully');
     }
 
 
@@ -64,7 +59,7 @@ class CustomerController extends Controller
     {
         $customer = Customer::find($id);
         if (!$customer) {
-            return response()->json(['message' => 'Customer not found'], 404);
+            return redirect()->back()->with('error', 'Customer not found');
         }
 
         $validator = Validator::make($request->all(), [
@@ -74,7 +69,7 @@ class CustomerController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json($validator->errors(), 400);
+            return redirect()->back()->withErrors($validator)->withInput();
         }
 
         $customer->name = $request->name;
@@ -82,7 +77,7 @@ class CustomerController extends Controller
         $customer->password = bcrypt($request->password);
         $customer->save();
 
-        return response()->json($customer, 200);
+        return redirect()->route('customers.show', $customer->id)->with('success', 'Customer updated successfully');
     }
 
 
@@ -90,11 +85,11 @@ class CustomerController extends Controller
     {
         $customer = Customer::find($id);
         if (!$customer) {
-            return response()->json(['message' => 'Customer not found'], 404);
+            return redirect()->back()->with('error', 'Customer not found');
         }
 
         $customer->delete();
-        return response()->json(['message' => 'Customer deleted successfully'], 200);
+        return redirect()->route('customers.index')->with('success', 'Customer deleted successfully');
     }
 
 
@@ -110,7 +105,7 @@ class CustomerController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json($validator->errors(), 400);
+            return redirect()->back()->withErrors($validator)->withInput();
         }
 
         $customer = Customer::create([
@@ -119,7 +114,7 @@ class CustomerController extends Controller
             'password' => bcrypt($request->password),
         ]);
 
-        return response()->json(['success' => true, 'customer' => $customer], 201);
+        return redirect()->route('customers.show', $customer->id)->with('success', 'Customer registered successfully');
     }
 
     public function login(Request $request)
@@ -127,10 +122,10 @@ class CustomerController extends Controller
         $credentials = $request->only('email', 'password');
 
         if (Auth::guard('customer')->attempt($credentials)) {
-            return response()->json(['success' => true], 200);
+            return redirect()->route('dashboard')->with('success', 'Login successful');
         }
 
-        return response()->json(['success' => false, 'message' => 'Invalid credentials'], 401);
+        return redirect()->back()->with('error', 'Invalid credentials');
     }
 
     public function searchHotels($criteria)
@@ -139,7 +134,7 @@ class CustomerController extends Controller
                         ->orWhere('location', 'like', '%' . $criteria . '%')
                         ->get();
 
-        return response()->json($hotels, 200);
+        return view('hotels.index', compact('hotels'));
     }
 
     public function makeReservation(Request $request, $hotelId)
@@ -151,7 +146,7 @@ class CustomerController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json($validator->errors(), 400);
+            return redirect()->back()->withErrors($validator)->withInput();
         }
 
         $reservation = Reservation::create([
@@ -170,13 +165,13 @@ class CustomerController extends Controller
             $reservation->rooms()->attach($roomDetail['room_id'], ['room_price' => $roomDetail['room_price']]);
         }
 
-        return response()->json($reservation, 201);
+        return redirect()->route('reservations.show', $reservation->id)->with('success', 'Reservation made successfully');
     }
 
     public function receiveNotification()
     {
         $notifications = Notification::where('customer_id', Auth::id())->get();
-        return response()->json($notifications, 200);
+        return view('notifications.index', compact('notifications'));
     }
 
     public function leaveReview(Request $request, $hotelId)
@@ -187,7 +182,7 @@ class CustomerController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json($validator->errors(), 400);
+            return redirect()->back()->withErrors($validator)->withInput();
         }
 
         $review = Review::create([
@@ -197,6 +192,6 @@ class CustomerController extends Controller
             'hotel_id' => $hotelId,
         ]);
 
-        return response()->json($review, 201);
+        return redirect()->route('hotels.show', $hotelId)->with('success', 'Review submitted successfully');
     }
 }
