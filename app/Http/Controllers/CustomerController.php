@@ -33,28 +33,34 @@ class CustomerController extends Controller
 
 
     public function store(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'username' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:customers',
-            'password' => 'required|string|min:8|confirmed',
-            'birth_date' => 'required | date | before:' . now()->subYears(19)->format('Y-m-d') . ' | date_format:Y-m-d'
-        ]);
+{
+    $messages = [
+        'birth_date.before' => 'You must be at least 19 years old.',
+        'password' => 'The password must contain at least one uppercase letter, one lowercase letter, one special character, and be at least 8 characters long.',
+    ];
 
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
-        }
+    $validator = Validator::make($request->all(), [
+        'username' => 'required|string|max:255|unique:customers',
+        'email' => 'required|string|email|max:255|unique:customers',
+        'password' => 'required|string|min:8|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*\W).+$/',
+        'birth_date' => 'required|date|before:' . now()->subYears(19)->format('Y-m-d') . '|date_format:Y-m-d'
+    ], $messages);
 
-        $customer = Customer::create([
-            'username' => $request->username,
-            'email' => $request->email,
-            'password' => bcrypt($request->password),
-            'birth_date' => $request->birth_date,
-        ]);
-
-        return redirect()->route('login', $customer->id)->with('success', 'Customer created successfully');
+    if ($validator->fails()) {
+        return redirect()->back()->withErrors($validator)->withInput();
     }
 
+    $customer = Customer::create([
+        'username' => $request->username,
+        'email' => $request->email,
+        'password' => bcrypt($request->password),
+        'birth_date' => $request->birth_date,
+    ]);
+
+    // Additional logic if needed
+
+    return redirect()->route('login')->with('success', 'Customer created successfully.');
+}
 
 
     public function update(Request $request, $id)
