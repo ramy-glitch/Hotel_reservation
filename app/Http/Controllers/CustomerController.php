@@ -38,6 +38,7 @@ class CustomerController extends Controller
             'username' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:customers',
             'password' => 'required|string|min:8|confirmed',
+            'birth_date' => 'required | date | before:' . now()->subYears(19)->format('Y-m-d') . ' | date_format:Y-m-d'
         ]);
 
         if ($validator->fails()) {
@@ -48,7 +49,7 @@ class CustomerController extends Controller
             'username' => $request->username,
             'email' => $request->email,
             'password' => bcrypt($request->password),
-            
+            'birth_date' => $request->birth_date,
         ]);
 
         return redirect()->route('login', $customer->id)->with('success', 'Customer created successfully');
