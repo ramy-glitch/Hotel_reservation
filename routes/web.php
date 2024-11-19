@@ -34,14 +34,7 @@ Route::resource('customers', CustomerController::class)->only(['store']);
 
 // Admin Routes
 Route::middleware('auth:admin')->group(function () {
-    Route::resource('admins', AdminController::class);
-    Route::resource('services', ServiceController::class);
-    Route::resource('hotels', HotelController::class);
-    Route::resource('rooms', RoomController::class);
-    Route::resource('reviews', ReviewController::class);
-    Route::resource('notifications', NotificationController::class);
-    Route::resource('hotel-photos', HotelPhotoController::class);
-    Route::resource('room-photos', RoomPhotoController::class);
+
 
     // Custom routes for AdminController methods
     Route::post('customers/{customer_id}/update', [AdminController::class, 'updateCustomerAccount'])->name('customers.update');
@@ -53,11 +46,7 @@ Route::middleware('auth:admin')->group(function () {
 
 // Hotel Manager Routes
 Route::middleware('auth:hotel_manager')->group(function () {
-    Route::resource('hotel-managers', HotelManagerController::class);
-    Route::resource('reservations', ReservationController::class);
-    Route::resource('reservation-rooms', ReservationRoomController::class);
-    Route::resource('hotel-photos', HotelPhotoController::class);
-    Route::resource('room-photos', RoomPhotoController::class);
+
 
     // Custom routes for HotelManagerController methods
     Route::get('hotels', [HotelManagerController::class, 'index'])->name('hotels.index');
@@ -85,17 +74,4 @@ Route::middleware('auth:hotel_manager')->group(function () {
 Route::middleware('auth:customer')->group(function () {
     Route::get('dashboard', [CustomerController::class, 'dashboard'])->name('customer.dashboard');
     Route::get('hotels', [HotelController::class, 'index'])->name('hotels.index');
-    Route::resource('reservations', ReservationController::class);
-    Route::resource('rooms', RoomController::class);
-    Route::resource('reviews', ReviewController::class);
-    Route::resource('notifications', NotificationController::class);
 });
-
-// Hotel Routes
-/*
-Route::resource('hotels', HotelController::class);
-Route::get('hotels/{id}/details', [HotelController::class, 'getHotelDetails'])->name('hotels.details');
-Route::get('hotels/{id}/rooms', [HotelController::class, 'getRooms'])->name('hotels.rooms');
-Route::get('hotels/{id}/services', [HotelController::class, 'getServices'])->name('hotels.services');
-Route::get('hotels/{id}/reviews', [HotelController::class, 'getReviews'])->name('hotels.reviews');
-*/

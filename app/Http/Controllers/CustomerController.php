@@ -35,7 +35,7 @@ class CustomerController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
+            'username' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:customers',
             'password' => 'required|string|min:8|confirmed',
         ]);
@@ -45,12 +45,13 @@ class CustomerController extends Controller
         }
 
         $customer = Customer::create([
-            'name' => $request->name,
+            'username' => $request->username,
             'email' => $request->email,
             'password' => bcrypt($request->password),
+            
         ]);
 
-        return redirect()->route('customers.show', $customer->id)->with('success', 'Customer created successfully');
+        return redirect()->route('login', $customer->id)->with('success', 'Customer created successfully');
     }
 
 
