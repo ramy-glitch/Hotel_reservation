@@ -154,9 +154,7 @@ input[type="password"] {
 button {
     background-color: #00aaff;
     color: #ffffff;
-
-    padding: 10px 10px;
-
+    padding: 10px 15px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
@@ -349,49 +347,150 @@ button:hover {
     opacity: 0.8;
 }
 
-/* Hotel Information Styling */
-.hotel-info h4 {
-    font-size: 1.8rem;
-    color: #333;
+/* Hotel Information Styling - Simple Blue Box for Main Titles */
+.hotel-info h4,
+.section h3 {
+    font-size: 1.8rem; /* Font size for the main titles */
+    color: #ffffff; /* White text for contrast */
+    background-color: #007acc; /* Blue background */
+    padding: 10px 15px; /* Padding inside the box */
+    border-radius: 5px; /* Rounded corners for a smooth look */
     margin-top: 20px;
-    margin-bottom: 10px;
-    border-left: 4px solid #00aaff;
-    padding-left: 10px;
+    margin-bottom: 15px;
+    font-weight: 600;
+    display: inline-block; /* To keep the title contained */
 }
 
-.hotel-info p {
-    font-size: 1rem;
-    color: #555;
-    margin-bottom: 10px;
-}
-
-.hotel-info ul {
-    list-style: disc;
-    padding-left: 20px;
-    margin-bottom: 20px;
-    color: #666;
-}
-
-.hotel-info ul li {
-    margin-bottom: 5px;
-}
-
-/* Book Now Button Styling */
-.book-now-button {
-    background-color: #00aaff;
-    color: #fff;
-    padding: 10px 20px;
-    font-size: 1rem;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
+/* Enhanced Services Section */
+.services {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
     margin-top: 15px;
 }
 
-.book-now-button:hover {
-    background-color: #008ecc;
+.services span {
+    background-color: #e0f7ff;
+    color: #007acc;
+    padding: 8px 12px;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
+
+.services span::before {
+    content: '✓';
+    font-weight: bold;
+}
+
+/* Updated Price and Summary Styling */
+.summary {
+    display: flex;
+    gap: 15px;
+    margin-top: 10px;
+    align-items: center;
+    font-weight: 500;
+}
+
+.rating {
+    background-color: #00c853;
+    color: #fff;
+    padding: 8px 12px;
+    border-radius: 5px;
+    font-size: 1rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.location-rating {
+    background-color: #ffab00;
+    color: #fff;
+    padding: 8px 12px;
+    border-radius: 5px;
+    font-size: 1rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Stylish Book Now Button */
+.book-now-button {
+    background-color: #007acc;
+    color: #fff;
+    padding: 12px 24px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: background-color 0.3s, box-shadow 0.3s;
+    display: inline-block;
+    margin-top: 20px;
+    box-shadow: 0 4px 8px rgba(0, 122, 204, 0.2);
+}
+
+.book-now-button:hover {
+    background-color: #005b99;
+    box-shadow: 0 6px 12px rgba(0, 91, 153, 0.3);
+}
+
+/* Gallery Enhancements */
+.hotel-gallery {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.main-image {
+    width: 90%;
+    max-width: 700px;
+    border-radius: 10px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.main-image:hover {
+    transform: scale(1.05);
+}
+
+.thumbnail-gallery {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.thumbnail-gallery img {
+    width: 100px;
+    height: 60px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: transform 0.3s, opacity 0.3s;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.thumbnail-gallery img:hover {
+    transform: scale(1.1);
+    opacity: 0.8;
+}
+/* Hotel Title Styling */
+.hotel-title {
+    font-size: 2rem; /* Size of the title */
+    color: #333; /* Dark color for text */
+    font-weight: 700; /* Bold weight for emphasis */
+    text-align: left; /* Align left */
+    margin: 20px 0; /* Margin for spacing */
+    background-color: transparent !important; /* Ensure no background */
+    border-bottom: 2px solid #007acc; /* Optional: add a bottom border for emphasis */
+    padding-bottom: 5px; /* Space below the text */
+}
+
+
+
+
 /* Booking Page Styling */
 #booking-section h3 {
     font-size: 2rem;
@@ -402,25 +501,12 @@ button:hover {
 }
 
 form {
-
-    display: flex ;
+    display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
+    gap: 15px;
     max-width: 500px;
-    max-height: 500px;
-    margin: 8% auto 8%;
-   
-
+    margin: 0 auto;
 }
-
-form input,label{
-    max-width: 500px;
-    min-width: 330px;
-}
-
-
 
 label {
     font-size: 1rem;
@@ -449,67 +535,7 @@ input, select {
 .confirm-booking-button:hover {
     background-color: #008ecc;
 }
-.user-reviews {
-    margin-top: 30px;
-    padding-top: 20px;
-    border-top: 2px solid #00aaff;
-}
 
-.user-reviews h4 {
-    font-size: 1.8rem;
-    color: #333;
-    margin-bottom: 15px;
-}
-
-.review {
-    background-color: #f9f9f9;
-    padding: 15px;
-    border-radius: 8px;
-    margin-bottom: 15px;
-}
-
-.review p {
-    margin: 5px 0;
-}
-
-.add-review-form {
-    margin-top: 20px;
-}
-
-.add-review-form h5 {
-    font-size: 1.4rem;
-    margin-bottom: 10px;
-}
-
-.add-review-form label {
-    display: block;
-    font-weight: bold;
-    margin: 10px 0 5px;
-}
-
-.add-review-form input, 
-.add-review-form textarea, 
-.add-review-form select {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-}
-
-.submit-review-button {
-    background-color: #00aaff;
-    color: #fff;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-.submit-review-button:hover {
-    background-color: #008ecc;
-}
 
 /* Styles généraux pour les grands écrans (par défaut) */
 
@@ -765,13 +791,9 @@ header .login-btn, .register-btn {
 footer {
     background-color: #1d3557;
     color: white;
-
-    padding: 30px;
-    margin-top:10px;
+    padding: 20px;
     display: flex;
     justify-content: space-between;
-    align-items:baseline;
-
     flex-wrap: wrap;
 }
 
@@ -794,6 +816,12 @@ footer a {
     display: block;
     margin-bottom: 5px;
     font-size: 0.9em;
-
 }
+
+h1, h2, h3, h4, h5, h6 {
+    border-bottom: none; 
+    text-decoration: none; 
+}
+
+
 
