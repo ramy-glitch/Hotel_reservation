@@ -36,13 +36,10 @@
                     <h4>Personal Information</h4>
                     <form id="update-username-form">
                         <label for="username">User Name</label>
-                        <input type="text" id="username" name="username" value="{{ $customer->username }}" required>
-
-                        <label for="email">Email Address</label>
-                        <input type="email" id="email" name="email" value="{{ $customer->email }}" required>
+                        <input type="text" id="username" name="username" value="{{ $customer->username }}">
 
                         <label for="dob">Date of Birth</label>
-                        <input type="text" id="dob" value="{{ $customer->birth_date }}" disabled>
+                        <input type="date" id="dob" value="{{ $customer->birth_date }}" >
 
                         <button type="submit" class="update-button">Update Information</button>
                     </form>
