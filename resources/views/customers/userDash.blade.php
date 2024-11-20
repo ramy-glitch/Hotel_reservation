@@ -27,49 +27,55 @@
         </aside>
 
         <main class="main-content">
+            <!-- Account Info Section -->
             <section id="account-info" class="section active">
                 <h3>Account Information</h3>
-                <div class="profile-picture">
-                    <img src="{{ asset('images/profile.jpg') }}" alt="Profile Picture">
-                    <button>Upload New Picture</button>
-                </div>
+
+                <!-- Personal Info Form -->
                 <div class="personal-info">
                     <h4>Personal Information</h4>
-                    <label>Full Name</label>
-                    <input type="text" value="{{ $customer->username }}" disabled>
+                    <form id="update-username-form">
+                        <label for="username">User Name</label>
+                        <input type="text" id="username" name="username" value="{{ $customer->username }}" required>
 
-                    <label>Email Address</label>
-                    <input type="email" value="{{ $customer->email }}" disabled>
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email" value="{{ $customer->email }}" required>
 
-                    <label>Date of Birth</label>
-                    <input type="text" value="{{ $customer->birth_date }}" disabled>
+                        <label for="dob">Date of Birth</label>
+                        <input type="text" id="dob" value="{{ $customer->birth_date }}" disabled>
+
+                        <button type="submit" class="update-button">Update Information</button>
+                    </form>
                 </div>
+
+                <!-- Security Settings Form -->
                 <div class="security-settings">
                     <h4>Security Settings</h4>
-                    <button>Change Password</button>
+                    <form id="change-password-form">
+                        <label for="current-password">Current Password</label>
+                        <input type="password" id="current-password" name="current-password" placeholder="Enter current password" required>
+
+                        <label for="new-password">New Password</label>
+                        <input type="password" id="new-password" name="new-password" placeholder="Enter new password" required>
+
+                        <label for="confirm-password">Confirm New Password</label>
+                        <input type="password" id="confirm-password" name="confirm-password" placeholder="Confirm new password" required>
+
+                        <button type="submit" class="update-button">Change Password</button>
+                    </form>
                 </div>
-                <div class="notification-settings">
-                    <h4>Contact Preferences</h4>
-                    <label>Email Notifications</label>
-                    <input type="checkbox" checked>
-                    <label>SMS Notifications</label>
-                    <input type="checkbox">
-                </div>
-                <div class="address-info">
-                    <h4>Address Information</h4>
-                    <label>Primary Address</label>
-                    <input type="text" value="123 Main St, City, Country" disabled>
-                </div>
+
+                <!-- Delete Account -->
                 <div class="account-actions">
-                        <!-- Logout Button -->
                     <form action="{{ route('logout') }}" method="POST" style="display:inline;">
-                    @csrf
-                    <button class="delete-account" type="submit">Logout</button>
+                        @csrf
+                        <button class="delete-account" type="submit">Logout</button>
                     </form>
                     <button class="delete-account">Delete Account</button>
                 </div>
             </section>
 
+            <!-- Hotels Section -->
             <section id="hotels" class="section">
                 <h3>Available Hotels</h3>
                 <div class="filter-bar">
@@ -82,6 +88,7 @@
                     </select>
                     <button class="filter-button">Apply Filter</button>
                 </div>
+
                 <div class="hotel-grid">
                     <div class="hotel-card">
                         <img src="{{ asset('images/hotel1.jpg') }}" alt="Hotel Image">
@@ -92,6 +99,7 @@
                             <button class="details-button">View Details</button>
                         </div>
                     </div>
+
                     <div class="hotel-card">
                         <img src="{{ asset('images/hotel2.jpg') }}" alt="Hotel Image">
                         <div class="hotel-info">
@@ -104,19 +112,19 @@
                 </div>
             </section>
 
+            <!-- Reservations History Section -->
             <section id="reservations-history" class="section">
                 <h3>Reservations History</h3>
                 <p>Review your past reservations.</p>
             </section>
 
+            <!-- Notifications Section -->
             <section id="notifications" class="section">
                 <h3>Notifications</h3>
                 <p>View your recent notifications and updates.</p>
             </section>
         </main>
     </div>
-
-
 
     <script src="{{ asset('js/script.js') }}"></script>
 </body>
