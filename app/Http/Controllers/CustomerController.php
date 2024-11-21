@@ -67,6 +67,11 @@ class CustomerController extends Controller
     {
         
     
+        // how to know the id of a logged in user that is making this request 
+        $customer = Customer::find($id);    
+        if (!$customer) {
+            return response()->json(['error' => 'Customer not found']);
+        }
 
 
         $messages = [

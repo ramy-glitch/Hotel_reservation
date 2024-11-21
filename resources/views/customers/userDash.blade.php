@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Dashboard</title>
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
     @if (session('success'))
@@ -88,7 +89,7 @@
 
                 <div class="hotel-grid">
                     <div class="hotel-card">
-                        <img src="{{ asset('images/hotel1.jpg') }}" alt="Hotel Image">
+                        <img src="#" alt="Hotel Image">
                         <div class="hotel-info">
                             <h4>Hotel Name</h4>
                             <p>Location: City, Country</p>
@@ -98,7 +99,7 @@
                     </div>
 
                     <div class="hotel-card">
-                        <img src="{{ asset('images/hotel2.jpg') }}" alt="Hotel Image">
+                        <img src="#" alt="Hotel Image">
                         <div class="hotel-info">
                             <h4>Hotel Name</h4>
                             <p>Location: City, Country</p>
@@ -123,16 +124,16 @@
         </main>
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    
     <script>
-
-        // Update Username
+    // Update Username
+    window.onload = function() {
         $('#update-username-form').submit(function(e) {
             e.preventDefault();
             var username = $('#username').val();
             var dob = $('#dob').val();
             $.ajax({
-                url: "{{ route('customer.updateUsernameBirthday' }}",
+                url: "{{ route('customer.updateUsernameBirthday', ['id' => $customer->id]) }}",
                 type: 'POST',
                 data: {
                     username: username,
@@ -140,32 +141,39 @@
                     _token: "{{ csrf_token() }}"
                 },
                 success: function(response) {
-                    alert(response);
-                }
-            });
-        });
-
-        // Change Password
-        $('#change-password-form').submit(function(e) {
-            e.preventDefault();
-            var currentPassword = $('#current-password').val();
-            var newPassword = $('#new-password').val();
-            var confirmPassword = $('#confirm-password').val();
-            $.ajax({
-                url: "{{ route('customer.updatePassword' }}",
-                type: 'POST',
-                data: {
-                    currentPassword: currentPassword,
-                    newPassword: newPassword,
-                    confirmPassword: confirmPassword,
-                    _token: "{{ csrf_token() }}"
+                    alert(response.success);
                 },
-                success: function(response) {
-                    alert(response);
+                error: function(response) {
+                    alert(response.responseJSON.error);
                 }
             });
         });
 
-</body>
+                // Change Password
+            $('#change-password-form').submit(function(e) {
+                e.preventDefault();
+                var currentPassword = $('#current-password').val();
+                var newPassword = $('#new-password').val();
+                var confirmPassword = $('#confirm-password').val();
+                $.ajax({
+                    url: "{{ route('customer.updatePassword', ['id' => $customer->id]) }}",
+                    type: 'POST',
+                    data: {
+                        'current-password': currentPassword,
+                        'new-password': newPassword,
+                        'confirm-password': confirmPassword,
+                        _token: "{{ csrf_token() }}"
+                    },
+                    success: function(response) {
+                        alert(response.success);
+                    },
+                    error: function(response) {
+                        alert(response.responseJSON.error);
+                    }
+                });
+            });
+        };
+    </script>
 
-</html>
+    </body>
+    </html>
