@@ -63,29 +63,60 @@ class CustomerController extends Controller
 }
 
 
-    public function update(Request $request, $id)
+    public function updateUsernameBirthday(Request $request, $id)
     {
-        $customer = Customer::find($id);
-        if (!$customer) {
-            return redirect()->back()->with('error', 'Customer not found');
-        }
+        
+    
 
+
+        $messages = [
+            'dob.before' => 'You must be at least 19 years old.',
+            'password' => 'The password must contain at least one uppercase letter, one lowercase letter, one special character, and be at least 8 characters long.',
+        ];
+    
         $validator = Validator::make($request->all(), [
-            'name' => 'string|max:255',
-            'email' => 'string|email|max:255|unique:customers',
-            'password' => 'string|min:8|confirmed',
-        ]);
-
+            'username' => 'sometimes|string|max:255|unique:customers',
+            'dob' => 'sometimes|date|before:' . now()->subYears(19)->format('Y-m-d') . '|date_format:Y-m-d'
+        ], $messages);
+    
         if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
+            return response()->json(['errors' => $validator->errors()]);
         }
 
         $customer->name = $request->name;
-        $customer->email = $request->email;
+        $customer->birth_date = $request->dob;
+        $customer->save();
+
+        return response()->json(['success' => 'Username and birth date updated successfully']);
+    }
+
+    public function updatePassword(Request $request, $id)
+    {
+        $customer = Customer::find($id);
+        if (!$customer) {
+            return response()->json(['error' => 'Customer not found']);
+        }
+
+        $messages= [
+            'current-password.regex' => 'The password must contain at least one uppercase letter, one lowercase letter, one special character, and be at least 8 characters long.',
+            'new-password.regex' => 'The password must contain at least one uppercase letter, one lowercase letter, one special character, and be at least 8 characters long.',
+            'new-password.different' => 'The new password must be different from the current password.',
+        ];
+
+        $validator = Validator::make($request->all(), [
+            'current-password' => 'required|string|min:8|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*\W).+$/',
+            'new-password' => 'required|string|min:8|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*\W).+$/|different:current-password',
+            'confirm-password' => 'required|string|same:new-password',
+        ] , $messages);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()]);
+        }
+
         $customer->password = bcrypt($request->password);
         $customer->save();
 
-        return redirect()->route('customers.show', $customer->id)->with('success', 'Customer updated successfully');
+        return response()->json(['success' => 'Password updated successfully']);
     }
 
 

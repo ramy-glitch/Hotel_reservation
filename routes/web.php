@@ -48,4 +48,6 @@ Route::middleware('auth:hotel_manager')->group(function () {
 Route::middleware('auth:customer')->group(function () {
     Route::get('dashboard', [CustomerController::class, 'dashboard'])->name('customer.dashboard');
     Route::get('hotels', [HotelController::class, 'index'])->name('hotels.index');
+    Route::post('customers/update-username-birthday', [CustomerController::class, 'updateUsernameBirthday'])->name('customer.updateUsernameBirthday');
+    Route::post('customers/update-password', [CustomerController::class, 'updatePassword'])->name('customer.updatePassword');
 });

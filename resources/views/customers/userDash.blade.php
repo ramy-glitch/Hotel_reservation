@@ -123,7 +123,49 @@
         </main>
     </div>
 
-    <script src="{{ asset('js/script.js') }}"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script>
+
+        // Update Username
+        $('#update-username-form').submit(function(e) {
+            e.preventDefault();
+            var username = $('#username').val();
+            var dob = $('#dob').val();
+            $.ajax({
+                url: "{{ route('customer.updateUsernameBirthday' }}",
+                type: 'POST',
+                data: {
+                    username: username,
+                    dob: dob,
+                    _token: "{{ csrf_token() }}"
+                },
+                success: function(response) {
+                    alert(response);
+                }
+            });
+        });
+
+        // Change Password
+        $('#change-password-form').submit(function(e) {
+            e.preventDefault();
+            var currentPassword = $('#current-password').val();
+            var newPassword = $('#new-password').val();
+            var confirmPassword = $('#confirm-password').val();
+            $.ajax({
+                url: "{{ route('customer.updatePassword' }}",
+                type: 'POST',
+                data: {
+                    currentPassword: currentPassword,
+                    newPassword: newPassword,
+                    confirmPassword: confirmPassword,
+                    _token: "{{ csrf_token() }}"
+                },
+                success: function(response) {
+                    alert(response);
+                }
+            });
+        });
+
 </body>
 
 </html>
