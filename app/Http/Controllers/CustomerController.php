@@ -21,15 +21,6 @@ class CustomerController extends Controller
     }
 
 
-    public function show($id)
-    {
-        $customer = Customer::find($id);
-        if (!$customer) {
-            return redirect()->back()->with('error', 'Customer not found');
-        }
-
-        return view('customers.show', compact('customer'));
-    }
 
 
     public function store(Request $request)
@@ -63,66 +54,75 @@ class CustomerController extends Controller
 }
 
 
-    public function updateUsernameBirthday(Request $request, $id)
-    {
-        
-    
-        // how to know the id of a logged in user that is making this request 
-        $customer = Customer::find($id);    
-        if (!$customer) {
-            return response()->json(['error' => 'Customer not found']);
-        }
 
+public function updateUsernameBirthday(Request $request, $id)
+{
+    $customer = Customer::find($id);    
+    if (!$customer) {
+        return response()->json(['error' => 'Customer not found'], 404);
+    }
 
-        $messages = [
-            'dob.before' => 'You must be at least 19 years old.',
-            'password' => 'The password must contain at least one uppercase letter, one lowercase letter, one special character, and be at least 8 characters long.',
-        ];
-    
-        $validator = Validator::make($request->all(), [
-            'username' => 'sometimes|string|max:255|unique:customers',
-            'dob' => 'sometimes|date|before:' . now()->subYears(19)->format('Y-m-d') . '|date_format:Y-m-d'
-        ], $messages);
-    
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()]);
-        }
+    $messages = [
+        'username.unique' => 'The username has already been taken.',
+        'dob.before' => 'You must be at least 19 years old.',
+    ];
 
-        $customer->name = $request->name;
+    $validator = Validator::make($request->all(), [
+        'username' => 'sometimes|string|max:255|unique:customers',
+        'dob' => 'sometimes|date|before:' . now()->subYears(19)->format('Y-m-d') . '|date_format:Y-m-d'
+    ], $messages);
+
+    if ($validator->fails()) {
+        return response()->json(['errors' => $validator->errors()], 422);
+    }
+
+    if ($request->has('username')) {
+        $customer->username = $request->username;
+    }
+    if ($request->has('dob')) {
         $customer->birth_date = $request->dob;
-        $customer->save();
+    }
+    $customer->save();
 
-        return response()->json(['success' => 'Username and birth date updated successfully']);
+    return response()->json(['success' => 'Username and birth date updated successfully']);
+}
+
+
+public function updatePassword(Request $request, $id)
+{
+    $customer = Customer::find($id);
+    if (!$customer) {
+        return response()->json(['error' => 'Customer not found'], 404);
     }
 
-    public function updatePassword(Request $request, $id)
-    {
-        $customer = Customer::find($id);
-        if (!$customer) {
-            return response()->json(['error' => 'Customer not found']);
-        }
+    $messages = [
+        'current-password.regex' => 'The password must contain at least one uppercase letter, one lowercase letter, one special character, and be at least 8 characters long.',
+        'new-password.regex' => 'The password must contain at least one uppercase letter, one lowercase letter, one special character, and be at least 8 characters long.',
+        'new-password.different' => 'The new password must be different from the current password.',
+        'confirm-password.same' => 'The confirmation password does not match the new password.',
+    ];
 
-        $messages= [
-            'current-password.regex' => 'The password must contain at least one uppercase letter, one lowercase letter, one special character, and be at least 8 characters long.',
-            'new-password.regex' => 'The password must contain at least one uppercase letter, one lowercase letter, one special character, and be at least 8 characters long.',
-            'new-password.different' => 'The new password must be different from the current password.',
-        ];
+    $validator = Validator::make($request->all(), [
+        'current-password' => 'required|string|min:8|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*\W).+$/',
+        'new-password' => 'required|string|min:8|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*\W).+$/|different:current-password',
+        'confirm-password' => 'required|string|same:new-password',
+    ], $messages);
 
-        $validator = Validator::make($request->all(), [
-            'current-password' => 'required|string|min:8|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*\W).+$/',
-            'new-password' => 'required|string|min:8|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*\W).+$/|different:current-password',
-            'confirm-password' => 'required|string|same:new-password',
-        ] , $messages);
-
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()]);
-        }
-
-        $customer->password = bcrypt($request->password);
-        $customer->save();
-
-        return response()->json(['success' => 'Password updated successfully']);
+    if ($validator->fails()) {
+        return response()->json(['errors' => $validator->errors()], 422);
     }
+
+    // Check if the current password matches
+    if (!Hash::check($request->input('current-password'), $customer->password)) {
+        return response()->json(['error' => 'Current password is incorrect'], 422);
+    }
+
+    // Update the password
+    $customer->password = bcrypt($request->input('new-password'));
+    $customer->save();
+
+    return response()->json(['success' => 'Password updated successfully']);
+}
 
 
     public function destroy($id)
@@ -139,38 +139,6 @@ class CustomerController extends Controller
 
 
 
-
-    public function register(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:customers',
-            'password' => 'required|string|min:8|confirmed',
-        ]);
-
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
-        }
-
-        $customer = Customer::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => bcrypt($request->password),
-        ]);
-
-        return redirect()->route('customers.show', $customer->id)->with('success', 'Customer registered successfully');
-    }
-
-    public function login(Request $request)
-    {
-        $credentials = $request->only('email', 'password');
-
-        if (Auth::guard('customer')->attempt($credentials)) {
-            return redirect()->route('dashboard')->with('success', 'Login successful');
-        }
-
-        return redirect()->back()->with('error', 'Invalid credentials');
-    }
 
     public function searchHotels($criteria)
     {

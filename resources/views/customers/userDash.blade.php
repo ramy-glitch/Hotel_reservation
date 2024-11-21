@@ -141,39 +141,55 @@
                     _token: "{{ csrf_token() }}"
                 },
                 success: function(response) {
-                    alert(response.success);
+                    if (response.success) {
+                        alert(response.success);
+                    } else {
+                        alert('Error: ' + response.error);
+                    }
                 },
                 error: function(response) {
-                    alert(response.responseJSON.error);
+                    if (response.responseJSON && response.responseJSON.errors) {
+                        alert('Validation errors: ' + JSON.stringify(response.responseJSON.errors));
+                    } else {
+                        alert('Server error: ' + response.statusText);
+                    }
                 }
             });
         });
 
-                // Change Password
-            $('#change-password-form').submit(function(e) {
-                e.preventDefault();
-                var currentPassword = $('#current-password').val();
-                var newPassword = $('#new-password').val();
-                var confirmPassword = $('#confirm-password').val();
-                $.ajax({
-                    url: "{{ route('customer.updatePassword', ['id' => $customer->id]) }}",
-                    type: 'POST',
-                    data: {
-                        'current-password': currentPassword,
-                        'new-password': newPassword,
-                        'confirm-password': confirmPassword,
-                        _token: "{{ csrf_token() }}"
-                    },
-                    success: function(response) {
+        // Change Password
+        $('#change-password-form').submit(function(e) {
+            e.preventDefault();
+            var currentPassword = $('#current-password').val();
+            var newPassword = $('#new-password').val();
+            var confirmPassword = $('#confirm-password').val();
+            $.ajax({
+                url: "{{ route('customer.updatePassword', ['id' => $customer->id]) }}",
+                type: 'POST',
+                data: {
+                    'current-password': currentPassword,
+                    'new-password': newPassword,
+                    'confirm-password': confirmPassword,
+                    _token: "{{ csrf_token() }}"
+                },
+                success: function(response) {
+                    if (response.success) {
                         alert(response.success);
-                    },
-                    error: function(response) {
-                        alert(response.responseJSON.error);
+                    } else {
+                        alert('Error: ' + response.error);
                     }
-                });
+                },
+                error: function(response) {
+                    if (response.responseJSON && response.responseJSON.errors) {
+                        alert('Validation errors: ' + JSON.stringify(response.responseJSON.errors));
+                    } else {
+                        alert('Server error: ' + response.statusText);
+                    }
+                }
             });
-        };
-    </script>
+        });
+    };
+</script>
 
     </body>
     </html>
