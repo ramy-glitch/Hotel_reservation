@@ -14,13 +14,15 @@ class HotelController extends Controller
 {
     public function index()
     {
-        $hotels = Hotel::all();
-        // i  want only to get the first photo of each hotel
+        $hotels = Hotel::with(['firstPhoto'])->get();
+    
+        // Extract photo_url for each hotel
         foreach ($hotels as $hotel) {
-            
-            
-            $hotel->photo = HotelPhoto::where('hotel_id', $hotel->id)->first()->photo_url ?? null;
+            if (isset($hotel->firstPhoto)) {
+                $hotel->photo_url = $hotel->firstPhoto->photo_url;
+            }
         }
+    
         return view('customers.hotels', compact('hotels'));
     }
 
@@ -127,36 +129,42 @@ class HotelController extends Controller
 
 
     
+
+
     public function search(Request $request)
     {
         $query = Hotel::query();
     
-        if ($request->has('location')) {
+        // Apply filters based on the request
+        if ($request->filled('rating')) {
+            $query->whereHas('reviews', function ($q) use ($request) {
+                $q->where('rating', '>=', $request->input('rating'));
+            });
+        }
+    
+        if ($request->filled('location')) {
             $query->where('location', 'like', '%' . $request->input('location') . '%');
         }
     
-        if ($request->has('services')) {
-            $services = explode(',', $request->input('services'));
-            foreach ($services as $service) {
-                $query->whereHas('services', function ($q) use ($service) {
-                    $q->where('name', 'like', '%' . trim($service) . '%');
-                });
-            }
+        if ($request->filled('services')) {
+            $query->whereHas('services', function ($q) use ($request) {
+                $q->where('name', 'like', '%' . $request->input('services') . '%');
+            });
         }
     
-        if ($request->has('numOfPeople')) {
+        if ($request->filled('numOfPeople')) {
             $query->whereHas('rooms', function ($q) use ($request) {
                 $q->where('capacity', '>=', $request->input('numOfPeople'));
             });
         }
     
-        if ($request->has('maxBudget')) {
+        if ($request->filled('maxBudget')) {
             $query->whereHas('rooms', function ($q) use ($request) {
                 $q->where('price', '<=', $request->input('maxBudget'));
             });
         }
     
-        if ($request->has('checkInDate')) {
+        if ($request->filled('checkInDate')) {
             $query->whereHas('rooms', function ($q) use ($request) {
                 $q->whereDoesntHave('reservations', function ($q) use ($request) {
                     $q->where('check_in', '<=', $request->input('checkInDate'))
@@ -164,16 +172,19 @@ class HotelController extends Controller
                 });
             });
         }
-
-        if ($request->has('minRating')) {
-            $query->whereHas('reviews', function ($q) use ($request) {
-                $q->where('rating', '>=', $request->input('minRating'));
-            });
-        }
     
         $hotels = $query->with(['rooms', 'services', 'reviews', 'firstPhoto'])->get();
     
-        return response()->json($hotels);
+        // Extract photo_url for each hotel
+        foreach ($hotels as $hotel) {
+            if (isset($hotel->firstPhoto)) {
+                $hotel->photo_url = $hotel->firstPhoto->photo_url;
+            }
+        }
+    
+        $html = view('partials.hotelsSearch', compact('hotels'))->render();
+    
+        return response()->json(['html' => $html]);
     }
 
 }
