@@ -130,11 +130,13 @@ public function updatePassword(Request $request, $id)
     {
         $customer = Customer::find($id);
         if (!$customer) {
-            return redirect()->back()->with('error', 'Customer not found');
+            return response()->json(['error' => 'Customer not found'], 404);
         }
 
+        Auth::logout();
         $customer->delete();
-        return redirect()->route('customers.index')->with('success', 'Customer deleted successfully');
+
+        return response()->json(['success' => 'Customer deleted successfully']);
     }
 
 

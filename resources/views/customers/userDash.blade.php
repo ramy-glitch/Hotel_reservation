@@ -69,7 +69,11 @@
                         @csrf
                         <button class="delete-account" type="submit">Logout</button>
                     </form>
-                    <button class="delete-account">Delete Account</button>
+                    
+                    <form id="delete-account-form">
+                        @csrf
+                        @method('DELETE')
+                        <button class="delete-account" type="submit">Delete Account</button>
                 </div>
             </section>
 
@@ -187,6 +191,37 @@
                     }
                 }
             });
+        });
+
+
+        // Delete Account
+        $('#delete-account-form').submit(function(e) {
+            e.preventDefault();
+            if (confirm('Are you sure you want to delete your account?')) {
+                $.ajax({
+                    url: "{{ route('customer.destroy', ['id' => $customer->id]) }}",
+                    type: 'POST',
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                        _method: 'DELETE'
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            alert(response.success);
+                            window.location.href = "{{ route('welcome') }}";
+                        } else {
+                            alert('Error: ' + response.error);
+                        }
+                    },
+                    error: function(response) {
+                        if (response.responseJSON && response.responseJSON.errors) {
+                            alert('Validation errors: ' + JSON.stringify(response.responseJSON.errors));
+                        } else {
+                            alert('Server error: ' + response.statusText);
+                        }
+                    }
+                });
+            }
         });
     };
 </script>
