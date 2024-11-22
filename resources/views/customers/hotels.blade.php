@@ -10,14 +10,15 @@
 <body>
 
 <div class="dashboard-container">
-    <aside>
+    <aside class="sidebar">
         <h2 class="sidebar-logo">Dashboard</h2>
             <ul class="sidebar-menu">
-                <li><a href="#account-info" class="nav-link active">Account Info</a></li>
-                <li><a href="{{ route('hotels.index') }}" class="nav-link">Hotels</a></li>
+                <li><a href="{{ route('customer.dashboard') }}" class="nav-link">Account Info</a></li>
+                <li><a href="{{ route('hotels.index') }}" class="nav-link active">Hotels</a></li>
                 <li><a href="#reservations-history" class="nav-link">Reservations History</a></li>
                 <li><a href="#notifications" class="nav-link">Notifications</a></li>
             </ul>
+            
     </aside>
 
     <main class="main-content">
@@ -27,6 +28,11 @@
             <!-- Updated Filter Bar with More Options -->
             <div class="filter-bar">
                 <form id="filter-form">
+
+
+                    <input type="text" id="hotelname" name="hotelname" class="filter" placeholder="Hotel Name">
+                    <input type="text" id="location" name="location" class="filter" placeholder="Location">
+
                     <select id="rating" name="rating" class="filter">
                         <option value="">Filter by Rating</option>
                         <option value="5">5 Stars</option>
@@ -35,7 +41,6 @@
                         <option value="2">2 Stars</option>
                     </select>
 
-                    <input type="text" id="location" name="location" class="filter" placeholder="Location">
                     <input type="text" id="services" name="services" class="filter" placeholder="Services">
                     <input type="number" id="num-of-people" name="numOfPeople" class="filter" placeholder="Number of People">
                     <input type="number" name="maxBudget" placeholder="Max Budget ($)" class="filter" min="0" step="10">
@@ -50,6 +55,7 @@
         </section>
     </main>
 
+</div>
     <script>
     $(document).ready(function() {
         $('#filter-form').on('submit', function(e) {

@@ -141,6 +141,10 @@ class HotelController extends Controller
                 $q->where('rating', '>=', $request->input('rating'));
             });
         }
+
+        if ($request->filled('hotelname')) {
+            $query->where('hotelname', 'like', '%' . $request->input('hotelname') . '%');
+        }
     
         if ($request->filled('location')) {
             $query->where('location', 'like', '%' . $request->input('location') . '%');
@@ -148,27 +152,27 @@ class HotelController extends Controller
     
         if ($request->filled('services')) {
             $query->whereHas('services', function ($q) use ($request) {
-                $q->where('name', 'like', '%' . $request->input('services') . '%');
+                $q->where('servicename', 'like', '%' . $request->input('services') . '%');
             });
         }
     
         if ($request->filled('numOfPeople')) {
             $query->whereHas('rooms', function ($q) use ($request) {
-                $q->where('capacity', '>=', $request->input('numOfPeople'));
+                $q->where('max_capacity', '>=', $request->input('numOfPeople'));
             });
         }
     
         if ($request->filled('maxBudget')) {
             $query->whereHas('rooms', function ($q) use ($request) {
-                $q->where('price', '<=', $request->input('maxBudget'));
+                $q->where('adult_price', '<=', $request->input('maxBudget'));
             });
         }
     
         if ($request->filled('checkInDate')) {
             $query->whereHas('rooms', function ($q) use ($request) {
                 $q->whereDoesntHave('reservations', function ($q) use ($request) {
-                    $q->where('check_in', '<=', $request->input('checkInDate'))
-                      ->where('check_out', '>=', $request->input('checkInDate'));
+                    $q->where('check_in_date', '<=', $request->input('checkInDate'))
+                      ->where('check_out_date', '>=', $request->input('checkInDate'));
                 });
             });
         }
