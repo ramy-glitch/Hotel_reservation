@@ -24,16 +24,7 @@ class HotelController extends Controller
         return view('customers.hotels', compact('hotels'));
     }
 
-    public function show($id)
-    {
-        $hotel = Hotel::findOrFail($id);
-        return view('hotels.show', compact('hotel'));
-    }
-
-    public function create()
-    {
-        return view('hotels.create');
-    }
+    
 
     public function store(Request $request)
     {
@@ -131,4 +122,58 @@ class HotelController extends Controller
         // Handle photo upload logic here
         return redirect()->route('hotels.show', $id)->with('success', 'Photo added successfully');
     }
+
+
+
+
+    
+    public function search(Request $request)
+    {
+        $query = Hotel::query();
+    
+        if ($request->has('location')) {
+            $query->where('location', 'like', '%' . $request->input('location') . '%');
+        }
+    
+        if ($request->has('services')) {
+            $services = explode(',', $request->input('services'));
+            foreach ($services as $service) {
+                $query->whereHas('services', function ($q) use ($service) {
+                    $q->where('name', 'like', '%' . trim($service) . '%');
+                });
+            }
+        }
+    
+        if ($request->has('numOfPeople')) {
+            $query->whereHas('rooms', function ($q) use ($request) {
+                $q->where('capacity', '>=', $request->input('numOfPeople'));
+            });
+        }
+    
+        if ($request->has('maxBudget')) {
+            $query->whereHas('rooms', function ($q) use ($request) {
+                $q->where('price', '<=', $request->input('maxBudget'));
+            });
+        }
+    
+        if ($request->has('checkInDate')) {
+            $query->whereHas('rooms', function ($q) use ($request) {
+                $q->whereDoesntHave('reservations', function ($q) use ($request) {
+                    $q->where('check_in', '<=', $request->input('checkInDate'))
+                      ->where('check_out', '>=', $request->input('checkInDate'));
+                });
+            });
+        }
+
+        if ($request->has('minRating')) {
+            $query->whereHas('reviews', function ($q) use ($request) {
+                $q->where('rating', '>=', $request->input('minRating'));
+            });
+        }
+    
+        $hotels = $query->with(['rooms', 'services', 'reviews', 'firstPhoto'])->get();
+    
+        return response()->json($hotels);
+    }
+
 }

@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hotels</title>
     <link rel="stylesheet" href="{{ asset('css/hotel.css') }}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
     <div class="dashboard-container">
@@ -28,7 +29,7 @@
                     <form id="filter-form">
                         <input type="text" placeholder="Search hotels..." class="search-bar">
 
-                        <select class="filter">
+                        <select id="rating" class="filter">
                             <option value="">Filter by Rating</option>
                             <option value="5">5 Stars</option>
                             <option value="4">4 Stars</option>
@@ -37,6 +38,8 @@
                         </select>
 
                         <input type="text" id="location" class="filter" placeholder="Location">
+
+                        <input type="text" id="services" class="filter" placeholder="Services">
 
                         <input type="number" id="num-of-people" class="filter" placeholder="Number of People">
 
@@ -51,24 +54,40 @@
                     
                 </div>
 
-                <!-- Hotel Grid -->
-                <div class="hotel-grid">
-                    @foreach ($hotels as $hotel)
-                        <div class="hotel-card">
-                            <img src="{{ asset('images/'. $hotel->photo) }}" alt="Hotel Image">
-                            <div class="hotel-info">
-                                <h4>{{ $hotel->name }}</h4>
-                                <p>Location: {{ $hotel->location }}</p>
-                                <p>Rating: ⭐{{ $hotel->rating }}</p>
-                                <button class="details-button" onclick="location.href='#'">View Details</button>
-                            </div>
-                        </div>
-                    @endforeach
-                </div>
+
+                @include()
             </section>
         </main>
     </div>
 
-    
+
+    <script>
+        $(document).ready(function() {
+            // Filter hotels
+            $('#filter-form').submit(function(e) {
+                e.preventDefault();
+                let rating = $('#rating').val();
+                let location = $('#location').val();
+                let services = $('#services').val();
+                let numOfPeople = $('#num-of-people').val();
+                let maxBudget = $('#max-budget').val();
+                let checkInDate = $('#check-in-date').val();
+                $.ajax({
+                    url: '{{ route("hotels.search") }}',
+                    type: 'GET',
+                    data: {
+                        rating : rating,
+                        location: location,
+                        services: services,
+                        numOfPeople: numOfPeople,
+                        maxBudget: maxBudget,
+                        checkInDate: checkInDate
+                    },
+                    success: function(data) {
+                        $('.hotel-grid').html(data);
+                    }
+                });
+            });
+        });
 </body>
 </html>

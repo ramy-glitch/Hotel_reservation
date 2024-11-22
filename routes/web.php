@@ -51,4 +51,5 @@ Route::middleware('auth:customer')->group(function () {
     Route::post('customers/{id}/update-username-birthday', [CustomerController::class, 'updateUsernameBirthday'])->name('customer.updateUsernameBirthday');
     Route::post('customers/{id}/update-password', [CustomerController::class, 'updatePassword'])->name('customer.updatePassword');
     Route::delete('customers/{id}', [CustomerController::class, 'destroy'])->name('customer.destroy');
+    Route::get('hotels/search', [HotelController::class, 'search'])->name('hotels.search');
 });

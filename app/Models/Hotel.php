@@ -36,6 +36,11 @@ class Hotel extends Model
         return $this->hasMany(HotelPhoto::class);
     }
 
+    public function firstPhoto()
+    {
+        return $this->hasOne(HotelPhoto::class)->oldest();
+    }
+
     public function services()
     {
         return $this->hasMany(Service::class);
