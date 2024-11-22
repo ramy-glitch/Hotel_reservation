@@ -77,57 +77,7 @@
                 </div>
             </section>
 
-            <!-- Hotels Section -->
-            <section id="hotels" class="section">
-                <h3>Available Hotels</h3>
-                <div class="filter-bar">
-                    <input type="text" placeholder="Search hotels..." class="search-bar">
-                    <select class="filter">
-                        <option value="">Filter by Rating</option>
-                        <option value="5">5 Stars</option>
-                        <option value="4">4 Stars</option>
-                        <option value="3">3 Stars</option>
-                    </select>
-                    <button class="filter-button">Apply Filter</button>
-                </div>
-
-                <div class="hotel-grid">
-                    <div class="hotel-card">
-                        <img src="#" alt="Hotel Image">
-                        <div class="hotel-info">
-                            <h4>Hotel Name</h4>
-                            <p>Location: City, Country</p>
-                            <p>Rating: ⭐⭐⭐⭐⭐</p>
-                            <button class="details-button">View Details</button>
-                        </div>
-                    </div>
-
-                    <div class="hotel-card">
-                        <img src="#" alt="Hotel Image">
-                        <div class="hotel-info">
-                            <h4>Hotel Name</h4>
-                            <p>Location: City, Country</p>
-                            <p>Rating: ⭐⭐⭐⭐</p>
-                            <button class="details-button">View Details</button>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Reservations History Section -->
-            <section id="reservations-history" class="section">
-                <h3>Reservations History</h3>
-                <p>Review your past reservations.</p>
-            </section>
-
-            <!-- Notifications Section -->
-            <section id="notifications" class="section">
-                <h3>Notifications</h3>
-                <p>View your recent notifications and updates.</p>
-            </section>
-        </main>
-    </div>
-
+            
     
     <script>
     // Update Username

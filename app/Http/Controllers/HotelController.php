@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Hotel;
+use App\Models\HotelPhoto;
 use App\Models\Room;
 use App\Models\Service;
 use App\Models\Review;
@@ -14,7 +15,13 @@ class HotelController extends Controller
     public function index()
     {
         $hotels = Hotel::all();
-        return view('hotels.index', compact('hotels'));
+        // i  want only to get the first photo of each hotel
+        foreach ($hotels as $hotel) {
+            
+            
+            $hotel->photo = HotelPhoto::where('hotel_id', $hotel->id)->first()->photo_url ?? null;
+        }
+        return view('customers.hotels', compact('hotels'));
     }
 
     public function show($id)
