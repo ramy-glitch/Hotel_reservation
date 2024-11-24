@@ -39,6 +39,7 @@ Route::middleware('auth:admin')->group(function () {
     Route::post('admins/{id}/update-username', [AdminController::class, 'updateUsername'])->name('admin.updateUsername');
     Route::post('admins/{id}/update-password', [AdminController::class, 'updatePassword'])->name('admin.updatePassword');
     Route::delete('admins/{id}', [AdminController::class, 'destroy'])->name('admin.destroy');
+    Route::get('statistics', [AdminController::class, 'statistics'])->name('admin.statistics');
 
 
 });

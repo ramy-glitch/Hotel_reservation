@@ -21,7 +21,7 @@
             <h2 class="sidebar-logo">Dashboard</h2>
             <ul class="sidebar-menu">
                 <li><a href="{{route('admins.index')}}" class="nav-link active">Account Info</a></li>
-                <li><a href="#" class="nav-link">Statistics</a></li>
+                <li><a href="{{route('admin.statistics')}}" class="nav-link">Statistics</a></li>
                 <li><a href="#" class="nav-link">Hotels Manager Management</a></li>
                 <li><a href="#" class="nav-link">Users Management</a></li>
             </ul>

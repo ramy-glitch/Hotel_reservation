@@ -8,6 +8,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use App\Models\Hotel;
+use App\Models\Reservation;
+use App\Models\HotelManager;
+
 
 class AdminController extends Controller
 {
@@ -88,6 +92,37 @@ public function destroy($id)
 
     return response()->json(['success' => 'Admin deleted successfully']);
 }
+
+
+
+
+
+public function statistics(){
+
+    // Get the total number of customers and hotels and reservations
+
+    $customers = Customer::count();
+    $hotels = Hotel::count();
+    $reservations = Reservation::count();
+    $hotelManagers = HotelManager::count();
+
+    return view('admins.statistics', compact('customers', 'hotels', 'reservations', 'hotelManagers'));
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     public function updateCustomerAccount($customer_id, Request $request)
