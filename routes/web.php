@@ -35,6 +35,10 @@ Route::resource('customers', CustomerController::class)->only(['store']);
 // Admin Routes
 Route::middleware('auth:admin')->group(function () {
 
+    Route::get('admin', [AdminController::class, 'index'])->name('admins.index');
+    Route::post('admins/{id}/update-username', [AdminController::class, 'updateUsername'])->name('admin.updateUsername');
+    Route::post('admins/{id}/update-password', [AdminController::class, 'updatePassword'])->name('admin.updatePassword');
+    Route::delete('admins/{id}', [AdminController::class, 'destroy'])->name('admin.destroy');
 
 
 });

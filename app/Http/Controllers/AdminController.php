@@ -11,94 +11,82 @@ class AdminController extends Controller
 {
     public function index()
     {
-        $admins = Admin::all();
-        return view('admins.index', compact('admins'));
+        $admin = Auth::user();
+        return view('admins.index', compact('admin'));
     }
 
-    public function show($id)
+    public function updateUsername(Request $request, $id)
     {
         $admin = Admin::find($id);
-        if (!$admin) {
-            return redirect()->route('admins.index')->with('error', 'Admin not found');
-        }
-        return view('admins.show', compact('admin'));
-    }
-
-    public function create()
-    {
-        return view('admins.create');
-    }
-
-    public function store(Request $request)
-    {
+        
+        $messages = [
+            'username.unique' => 'The username has already been taken.',
+        ];
+    
         $validator = Validator::make($request->all(), [
-            'username' => 'required|unique:admins|max:255',
-            'email' => 'required|email|unique:admins|max:255',
-            'password' => 'required|min:6',
-        ]);
-
+            'username' => 'sometimes|string|max:255|unique:admins',
+        ], $messages);
+    
         if ($validator->fails()) {
-            return redirect()->route('admins.create')
-                             ->withErrors($validator)
-                             ->withInput();
+            return response()->json(['errors' => $validator->errors()], 422);
         }
-
-        $admin = Admin::create([
-            'username' => $request->username,
-            'email' => $request->email,
-            'password' => bcrypt($request->password),
-        ]);
-
-        return redirect()->route('admins.index')->with('success', 'Admin created successfully');
+    
+        if ($request->has('username')) {
+            $customer->username = $request->username;
+        }
+        
+        $admin->save();
+    
+        return response()->json(['success' => 'Username  updated successfully']);
     }
 
-    public function edit($id)
-    {
-        $admin = Admin::find($id);
-        if (!$admin) {
-            return redirect()->route('admins.index')->with('error', 'Admin not found');
-        }
-        return view('admins.edit', compact('admin'));
+    public function updatePassword(Request $request, $id)
+{
+    $admin = Admin::find($id);
+
+    $messages = [
+        'current-password.regex' => 'The password must contain at least one uppercase letter, one lowercase letter, one special character, and be at least 8 characters long.',
+        'new-password.regex' => 'The password must contain at least one uppercase letter, one lowercase letter, one special character, and be at least 8 characters long.',
+        'new-password.different' => 'The new password must be different from the current password.',
+        'confirm-password.same' => 'The confirmation password does not match the new password.',
+    ];
+
+    $validator = Validator::make($request->all(), [
+        'current-password' => 'required|string|min:8|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*\W).+$/',
+        'new-password' => 'required|string|min:8|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*\W).+$/|different:current-password',
+        'confirm-password' => 'required|string|same:new-password',
+    ], $messages);
+
+    if ($validator->fails()) {
+        return response()->json(['errors' => $validator->errors()], 422);
     }
 
-    public function update(Request $request, $id)
-    {
-        $admin = Admin::find($id);
-        if (!$admin) {
-            return redirect()->route('admins.index')->with('error', 'Admin not found');
-        }
-
-        $validator = Validator::make($request->all(), [
-            'username' => 'sometimes|required|unique:admins,username,' . $id . '|max:255',
-            'email' => 'sometimes|required|email|unique:admins,email,' . $id . '|max:255',
-            'password' => 'sometimes|required|min:6',
-        ]);
-
-        if ($validator->fails()) {
-            return redirect()->route('admins.edit', $id)
-                             ->withErrors($validator)
-                             ->withInput();
-        }
-
-        $admin->update($request->all());
-        if ($request->has('password')) {
-            $admin->password = bcrypt($request->password);
-            $admin->save();
-        }
-
-        return redirect()->route('admins.index')->with('success', 'Admin updated successfully');
+    // Check if the current password matches
+    if (!Hash::check($request->input('current-password'), $customer->password)) {
+        return response()->json(['error' => 'Current password is incorrect'], 422);
     }
 
-    public function destroy($id)
-    {
-        $admin = Admin::find($id);
-        if (!$admin) {
-            return redirect()->route('admins.index')->with('error', 'Admin not found');
-        }
+    // Update the password
+    $customer->password = bcrypt($request->input('new-password'));
+    $customer->save();
 
-        $admin->delete();
-        return redirect()->route('admins.index')->with('success', 'Admin deleted successfully');
-    }
+    return response()->json(['success' => 'Password updated successfully']);
+}
+    
+
+
+
+
+
+public function destroy($id)
+{
+    $admin = Admin::find($id);
+
+    Auth::logout();
+    $admin->delete();
+
+    return response()->json(['success' => 'Admin deleted successfully']);
+}
 
 
     public function updateCustomerAccount($customer_id, Request $request)

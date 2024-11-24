@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Dashboard</title>
+    <title>Admin Dashboard</title>
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
@@ -20,10 +20,10 @@
         <aside class="sidebar">
             <h2 class="sidebar-logo">Dashboard</h2>
             <ul class="sidebar-menu">
-                <li><a href="{{ route('customer.dashboard') }}" class="nav-link active">Account Info</a></li>
-                <li><a href="{{ route('hotels.index') }}" class="nav-link">Hotels</a></li>
-                <li><a href="#reservations-history" class="nav-link">Reservations History</a></li>
-                <li><a href="#notifications" class="nav-link">Notifications</a></li>
+                <li><a href="{{route('admins.index')}}" class="nav-link active">Account Info</a></li>
+                <li><a href="#" class="nav-link">Statistics</a></li>
+                <li><a href="#" class="nav-link">Hotels Manager Management</a></li>
+                <li><a href="#" class="nav-link">Users Management</a></li>
             </ul>
         </aside>
 
@@ -37,10 +37,7 @@
                     <h4>Personal Information</h4>
                     <form id="update-username-form">
                         <label for="username">User Name</label>
-                        <input type="text" id="username" name="username" value="{{ $customer->username }}">
-
-                        <label for="dob">Date of Birth</label>
-                        <input type="date" id="dob" value="{{ $customer->birth_date }}" >
+                        <input type="text" id="username" name="username" value="{{ $admin->username }}">
 
                         <button type="submit" class="update-button">Update Information</button>
                     </form>
@@ -85,13 +82,11 @@
         $('#update-username-form').submit(function(e) {
             e.preventDefault();
             var username = $('#username').val();
-            var dob = $('#dob').val();
             $.ajax({
-                url: "{{ route('customer.updateUsernameBirthday', ['id' => $customer->id]) }}",
+                url: "{{ route('admin.updateUsername', ['id' => $admin->id]) }}",
                 type: 'POST',
                 data: {
                     username: username,
-                    dob: dob,
                     _token: "{{ csrf_token() }}"
                 },
                 success: function(response) {
@@ -118,7 +113,7 @@
             var newPassword = $('#new-password').val();
             var confirmPassword = $('#confirm-password').val();
             $.ajax({
-                url: "{{ route('customer.updatePassword', ['id' => $customer->id]) }}",
+                url: "{{ route('admin.updatePassword', ['id' => $admin->id]) }}",
                 type: 'POST',
                 data: {
                     'current-password': currentPassword,
@@ -149,7 +144,7 @@
             e.preventDefault();
             if (confirm('Are you sure you want to delete your account?')) {
                 $.ajax({
-                    url: "{{ route('customer.destroy', ['id' => $customer->id]) }}",
+                    url: "{{ route('admin.destroy', ['id' => $admin->id]) }}",
                     type: 'POST',
                     data: {
                         _token: "{{ csrf_token() }}",

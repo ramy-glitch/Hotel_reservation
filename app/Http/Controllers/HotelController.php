@@ -12,19 +12,6 @@ use Illuminate\Support\Facades\Validator;
 
 class HotelController extends Controller
 {
-    public function index()
-    {
-        $hotels = Hotel::with(['firstPhoto'])->get();
-    
-        // Extract photo_url for each hotel
-        foreach ($hotels as $hotel) {
-            if (isset($hotel->firstPhoto)) {
-                $hotel->photo_url = $hotel->firstPhoto->photo_url;
-            }
-        }
-    
-        return view('customers.hotels', compact('hotels'));
-    }
 
     
 
@@ -128,20 +115,55 @@ class HotelController extends Controller
 
 
 
+    /*************************************************************************** */
+
+
+    public function index()
+    {
+        $hotels = Hotel::with(['firstPhoto', 'reviews'])->get();
     
+        // Extract photo_url and calculate rating for each hotel
+        foreach ($hotels as $hotel) {
+            if (isset($hotel->firstPhoto)) {
+                $hotel->photo_url = $hotel->firstPhoto->photo_url;
+            }
+    
+            // Calculate the average rating from reviews
+            $hotel->rating = $hotel->reviews->avg('rating') ?? 'No rating available';
+        }
+    
+        return view('customers.hotels', compact('hotels'));
+    }
+    
+
+
+
+
+
 
 
     public function search(Request $request)
     {
+
+        $request->validate([
+            'rating' => 'nullable|integer|min:1|max:5',
+            'hotelname' => 'nullable|string|max:255',
+            'location' => 'nullable|string|max:255',
+            'services' => 'nullable|string|max:255',
+            'numOfPeople' => 'nullable|integer|min:1',
+            'maxBudget' => 'nullable|numeric|min:0',
+            'checkInDate' => 'nullable|date|after_or_equal:today',
+        ]);
+
         $query = Hotel::query();
     
         // Apply filters based on the request
         if ($request->filled('rating')) {
             $query->whereHas('reviews', function ($q) use ($request) {
-                $q->where('rating', '>=', $request->input('rating'));
+                $q->where('rating', '=', $request->input('rating'));
             });
         }
-
+    
         if ($request->filled('hotelname')) {
             $query->where('hotelname', 'like', '%' . $request->input('hotelname') . '%');
         }
@@ -157,8 +179,20 @@ class HotelController extends Controller
         }
     
         if ($request->filled('numOfPeople')) {
-            $query->whereHas('rooms', function ($q) use ($request) {
-                $q->where('max_capacity', '>=', $request->input('numOfPeople'));
+            $numOfPeople = $request->input('numOfPeople');
+            $query->whereHas('rooms', function ($q) use ($numOfPeople) {
+                $q->whereDoesntHave('reservations', function ($q) {
+                    $q->where('check_in_date', '<=', now())
+                      ->where('check_out_date', '>=', now());
+                })->where('max_capacity', '>=', 1); // Ensure room has at least 1 capacity
+            })->with(['rooms' => function ($q) use ($numOfPeople) {
+                $q->whereDoesntHave('reservations', function ($q) {
+                    $q->where('check_in_date', '<=', now())
+                      ->where('check_out_date', '>=', now());
+                })->where('max_capacity', '>=', 1); // Ensure room has at least 1 capacity
+            }])->get()->filter(function ($hotel) use ($numOfPeople) {
+                $totalCapacity = $hotel->rooms->sum('max_capacity');
+                return $totalCapacity >= $numOfPeople;
             });
         }
     
@@ -177,16 +211,21 @@ class HotelController extends Controller
             });
         }
     
-        $hotels = $query->with(['rooms', 'services', 'reviews', 'firstPhoto'])->get();
+        $hotels2 = $query->with(['rooms', 'services', 'reviews', 'firstPhoto'])->get();
     
-        // Extract photo_url for each hotel
-        foreach ($hotels as $hotel) {
+        // Extract photo_url and calculate rating for each hotel
+        foreach ($hotels2 as $hotel) {
             if (isset($hotel->firstPhoto)) {
                 $hotel->photo_url = $hotel->firstPhoto->photo_url;
             }
+    
+            // Calculate the average rating from reviews
+            $hotel->rating = $hotel->reviews->avg('rating') ?? 'No rating available';
+
+            // Calculate the number of available room
         }
     
-        $html = view('partials.hotelsSearch', compact('hotels'))->render();
+        $html = view('partials.hotelsSearch', compact('hotels2'))->render();
     
         return response()->json(['html' => $html]);
     }
