@@ -6,6 +6,8 @@ use App\Models\Admin;
 use App\Models\Customer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class AdminController extends Controller
 {
@@ -45,14 +47,13 @@ class AdminController extends Controller
     $admin = Admin::find($id);
 
     $messages = [
-        'current-password.regex' => 'The password must contain at least one uppercase letter, one lowercase letter, one special character, and be at least 8 characters long.',
         'new-password.regex' => 'The password must contain at least one uppercase letter, one lowercase letter, one special character, and be at least 8 characters long.',
         'new-password.different' => 'The new password must be different from the current password.',
         'confirm-password.same' => 'The confirmation password does not match the new password.',
     ];
 
     $validator = Validator::make($request->all(), [
-        'current-password' => 'required|string|min:8|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*\W).+$/',
+        'current-password' => 'required|string',
         'new-password' => 'required|string|min:8|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*\W).+$/|different:current-password',
         'confirm-password' => 'required|string|same:new-password',
     ], $messages);
@@ -62,13 +63,13 @@ class AdminController extends Controller
     }
 
     // Check if the current password matches
-    if (!Hash::check($request->input('current-password'), $customer->password)) {
+    if (!Hash::check($request->input('current-password'), $admin->password)) {
         return response()->json(['error' => 'Current password is incorrect'], 422);
     }
 
     // Update the password
-    $customer->password = bcrypt($request->input('new-password'));
-    $customer->save();
+    $admin->password = bcrypt($request->input('new-password'));
+    $admin->save();
 
     return response()->json(['success' => 'Password updated successfully']);
 }
