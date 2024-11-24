@@ -21,7 +21,7 @@ class AuthController extends Controller
         } elseif (Auth::guard('admin')->attempt($credentials)) {
             return redirect()->intended(route('admins.index'))->with('success');
         } elseif (Auth::guard('hotel_manager')->attempt($credentials)) {
-            return redirect()->intended('home')->with('success', 'Logged in successfully as Hotel Manager');
+            return redirect()->intended(route('hotelManager.index'))->with('success');
         }
 
         return redirect()->back()->withErrors(['email' => 'Invalid credentials'])->withInput();

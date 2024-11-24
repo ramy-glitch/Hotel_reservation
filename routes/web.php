@@ -45,6 +45,10 @@ Route::middleware('auth:admin')->group(function () {
 
 // Hotel Manager Routes
 Route::middleware('auth:hotel_manager')->group(function () {
+    Route::get('hotel-managers', [HotelManagerController::class, 'index'])->name('hotelManager.index');
+    Route::post('hotel-managers/{id}/update-username', [HotelManagerController::class, 'updateUsername'])->name('hotelManager.updateUsername');
+    Route::post('hotel-managers/{id}/update-password', [HotelManagerController::class, 'updatePassword'])->name('hotelManager.updatePassword');
+    Route::delete('hotel-managers/{id}', [HotelManagerController::class, 'destroy'])->name('hotelManager.destroy');
 
 });
 

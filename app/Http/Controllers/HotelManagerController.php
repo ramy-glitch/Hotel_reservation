@@ -9,30 +9,105 @@ use App\Models\Service;
 use App\Models\HotelPhoto;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class HotelManagerController extends Controller
 {
     public function index()
     {
-        $hotels = Hotel::where('manager_id', auth()->id())->get();
-        return view('hotels.index', compact('hotels'));
+        $hotelManager = Auth::user();
+        return view('hotelManagers.index', compact('hotelManager'));
     }
 
-    public function show($id)
+    public function updateUsername(Request $request, $id)
     {
-        $hotel = Hotel::where('id', $id)->where('manager_id', auth()->id())->first();
-        if (!$hotel) {
-            return redirect()->route('hotels.index')->with('error', 'Hotel not found or you do not have permission to view this hotel');
+        $hotelManager = HotelManager::find($id);
+        
+        $messages = [
+            'username.unique' => 'The username has already been taken.',
+        ];
+    
+        $validator = Validator::make($request->all(), [
+            'username' => 'sometimes|string|max:255|unique:hotel_managers',
+        ], $messages);
+    
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
         }
-        return view('hotels.show', compact('hotel'));
+    
+        if ($request->has('username')) {
+            $hotelManager->username = $request->username;
+        }
+        
+        $hotelManager->save();
+    
+        return response()->json(['success' => 'Username  updated successfully']);
     }
 
-    public function create()
-    {
-        return view('hotels.create');
+    public function updatePassword(Request $request, $id)
+{
+    $hotelManager = HotelManager::find($id);
+
+    $messages = [
+        'new-password.regex' => 'The password must contain at least one uppercase letter, one lowercase letter, one special character, and be at least 8 characters long.',
+        'new-password.different' => 'The new password must be different from the current password.',
+        'confirm-password.same' => 'The confirmation password does not match the new password.',
+    ];
+
+    $validator = Validator::make($request->all(), [
+        'current-password' => 'required|string',
+        'new-password' => 'required|string|min:8|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*\W).+$/|different:current-password',
+        'confirm-password' => 'required|string|same:new-password',
+    ], $messages);
+
+    if ($validator->fails()) {
+        return response()->json(['errors' => $validator->errors()], 422);
     }
 
-    public function store(Request $request)
+    // Check if the current password matches
+    if (!Hash::check($request->input('current-password'), $hotelManager->password)) {
+        return response()->json(['error' => 'Current password is incorrect'], 422);
+    }
+
+    // Update the password
+    $hotelManager->password = bcrypt($request->input('new-password'));
+    $hotelManager->save();
+
+    return response()->json(['success' => 'Password updated successfully']);
+}
+    
+
+
+
+
+
+public function destroy($id)
+{
+    $hotelManager = HotelManager::find($id);
+
+    Auth::logout();
+    $hotelManager->delete();
+
+    return response()->json(['success' => 'Hotel manager deleted successfully']);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /******************************************** */
+
+    public function storehotel(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'hotelname' => 'required|max:255',
@@ -56,7 +131,7 @@ class HotelManagerController extends Controller
         return redirect()->route('hotels.index')->with('success', 'Hotel added successfully');
     }
 
-    public function edit($id)
+    public function edithotel($id)
     {
         $hotel = Hotel::where('id', $id)->where('manager_id', auth()->id())->first();
         if (!$hotel) {
@@ -65,7 +140,7 @@ class HotelManagerController extends Controller
         return view('hotels.edit', compact('hotel'));
     }
 
-    public function update(Request $request, $id)
+    public function updatehotel(Request $request, $id)
     {
         $hotel = Hotel::where('id', $id)->where('manager_id', auth()->id())->first();
         if (!$hotel) {
@@ -88,7 +163,7 @@ class HotelManagerController extends Controller
         return redirect()->route('hotels.index')->with('success', 'Hotel updated successfully');
     }
 
-    public function destroy($id)
+    public function destroyhotel($id)
     {
         $hotel = Hotel::where('id', $id)->where('manager_id', auth()->id())->first();
         if (!$hotel) {
