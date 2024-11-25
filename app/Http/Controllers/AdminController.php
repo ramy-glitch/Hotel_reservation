@@ -110,6 +110,35 @@ public function statistics(){
 }
 
 
+public function showHotelManagers()
+{
+    $managers = HotelManager::all();
+    return view('admins.managerManagement', compact('managers'));
+}
+
+public function editHotelManager(Request $request,$id)
+{
+    // Logic to edit manager
+    $manager = HotelManager::find($id);
+    if (!$manager) {
+        return redirect()->route('managers.list')->with('error', 'Hotel Manager not found');
+    }
+
+    return view('admins.editManager', compact('manager'));
+
+
+}
+
+public function deleteHotelManager($id)
+{
+    $manager = HotelManager::find($id);
+    if (!$manager) {
+        return redirect()->route('managers.list')->with('error', 'Hotel Manager not found');
+    }
+
+    $manager->delete();
+    return redirect()->route('managers.list')->with('success');
+}
 
 
 
@@ -123,8 +152,7 @@ public function statistics(){
 
 
 
-
-
+/*************************************************************************************** */
     public function updateCustomerAccount($customer_id, Request $request)
     {
         $customer = Customer::find($customer_id);

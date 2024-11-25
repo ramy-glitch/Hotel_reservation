@@ -42,6 +42,11 @@ Route::middleware('auth:admin')->group(function () {
     Route::get('statistics', [AdminController::class, 'statistics'])->name('admin.statistics');
 
 
+    Route::get('/manager-management', [AdminController::class, 'showHotelManagers'])->name('managers.list');
+    Route::get('/manager/edit/{id}', [AdminController::class, 'editHotelManager'])->name('manager.edit');
+    Route::get('/manager/delete/{id}', [AdminController::class, 'deleteHotelManager'])->name('manager.delete');
+
+
 });
 
 // Hotel Manager Routes

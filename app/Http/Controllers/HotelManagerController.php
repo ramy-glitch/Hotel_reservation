@@ -103,8 +103,6 @@ public function destroy($id)
 
 
 
-
-
     /******************************************** */
 
     public function storehotel(Request $request)
