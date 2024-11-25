@@ -183,8 +183,74 @@ public function searchHotelManager(Request $request)
 
 
 
+public function showCustomers(){
+    $customers = Customer::all();
+    return view('admins.customerManagement', compact('customers'));
+}
+
+public function editCustomer(Request $request,$id)
+{
+    // Logic to edit customer
+    $customer = Customer::find($id);
+    if (!$customer) {
+        return redirect()->route('customers.list')->with('error', 'Customer not found');
+    }
+
+    return view('admins.editCustomer', compact('customer'));
+}
+
+public function updateCustomer(Request $request, $id)
+{
+    $customer = Customer::find($id);
+    if (!$customer) {
+        return redirect()->route('customers.list')->with('error', 'Customer not found');
+    }
+
+    $messages = [
+        'username.unique' => 'The username has already been taken.',
+        'email.unique' => 'The email has already been taken.',
+        'birth_date.before' => 'You must be at least 19 years old.',
+    ];
+
+    $validator = Validator::make($request->all(), [
+        'username' => 'sometimes|required|unique:customers,username,' . $id . '|max:255',
+        'email' => 'sometimes|required|email|unique:customers,email,' . $id . '|max:255',
+        'birth_date' => 'sometimes|date|before:' . now()->subYears(19)->format('Y-m-d') . '|date_format:Y-m-d',
+    ] , $messages);
+
+    if ($validator->fails()) {
+        return redirect()->route('customer.edit', $id)
+                         ->withErrors($validator)
+                         ->withInput();
+    }
+
+    $customer->update($request->all());
+    return redirect()->route('customers.list')->with('success');
+}
+
+public function deleteCustomer($id)
+{
+    $customer = Customer::find($id);
+    if (!$customer) {
+        return redirect()->route('customers.list')->with('error', 'Customer not found');
+    }
+
+    $customer->delete();
+    return redirect()->route('customers.list')->with('success');
+}
 
 
+public function searchCustomer(Request $request)
+{
+    $query = $request->input('search');
+    $customers2 = Customer::where('username', 'like', '%' . $query . '%')
+                            ->orWhere('email', 'like', '%' . $query . '%')
+                            ->orWhere('birth_date', 'like', '%' . $query . '%')
+                            ->get();
+
+    $html = view('partials.customersSearch', compact('customers2'))->render();
+    return response()->json(['html' => $html]);
+}
 
 
 

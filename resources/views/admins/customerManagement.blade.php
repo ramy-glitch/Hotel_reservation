@@ -15,47 +15,48 @@
             <ul class="sidebar-menu">
                 <li><a href="{{route('admins.index')}}" class="nav-link">Account Info</a></li>
                 <li><a href="{{route('admin.statistics')}}" class="nav-link">Statistics</a></li>
-                <li><a href="{{route('managers.list')}}" class="nav-link active">Hotels Manager Management</a></li>
-                <li><a href="{{route('customers.list')}}" class="nav-link">Users Management</a></li>
+                <li><a href="{{route('managers.list')}}" class="nav-link ">Hotels Manager Management</a></li>
+                <li><a href="{{route('customers.list')}}" class="nav-link active">Users Management</a></li>
             </ul>
         </aside>
 
         <!-- Main Content -->
         <main class="main-content">
             <section class="section active">
-                <h3>Hotel Manager Management</h3>
+                <h3>Users Management</h3>
                 
                 <!-- Search Bar -->
                 <div class="search-container">
                     <form id="search-form">
-                        <input type="text" name="search" placeholder="Search manager" class="search-bar">
+                        <input type="text" name="search" placeholder="Search customer " class="search-bar">
                         <button type="submit" class="search-button">Search</button>
                     </form>
-                   <a href="Add Manager.html"><button class="add-manager-button">Add Manager</button></a> 
                 </div>
 
-                <!-- Managers Table -->
+                <!-- customers Table -->
                 <table>
                     <thead>
                         <tr>
-                            <th>Manager ID</th>
-                            <th>Manager Name</th>
+                            <th>User ID</th>
+                            <th>User Name</th>
+                            <th>Birth date</th>
                             <th>Email</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
-                    <tbody id = "manager-grid">
-                        @foreach($managers as $manager)
+                    <tbody id = "customer-grid">
+                        @foreach($customers as $customer)
                             <tr>
-                                <td>{{ $manager->id }}</td>
-                                <td>{{ $manager->username }}</td>
-                                <td>{{ $manager->email }}</td>
+                                <td>{{ $customer->id }}</td>
+                                <td>{{ $customer->username }}</td>
+                                <td>{{ $customer->birth_date }}</td>
+                                <td>{{ $customer->email }}</td>
                                 <td>
                                     <div class="action-buttons">
-                                        <a href="{{ route('manager.edit', $manager->id) }}">
+                                        <a href="{{ route('customer.edit', $customer->id) }}">
                                             <button class="edit-btn">Edit</button>
                                         </a>
-                                        <a href="{{ route('manager.delete', $manager->id) }}">
+                                        <a href="{{ route('customer.delete', $customer->id) }}">
                                             <button class="delete-btn">Delete</button>
                                         </a>
                                     </div>
@@ -75,19 +76,19 @@ $(document).ready(function() {
         const query = $('input[name="search"]').val();
 
         $.ajax({
-            url: `{{ route('manager.search') }}?search=${query}`,
+            url: `{{ route('customer.search') }}?search=${query}`,
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
             },
             success: function(response) {
-                const managersContainer = $('#manager-grid');
-                managersContainer.empty();
+                const customersContainer = $('#customer-grid');
+                customersContainer.empty();
 
                 if (response.html.trim() === '') {
-                    managersContainer.html('<p>No managers found.</p>');
+                    customersContainer.html('<p>No users found.</p>');
                 } else {
-                    managersContainer.html(response.html);
+                    customersContainer.html(response.html);
                 }
             },
             error: function(error) {

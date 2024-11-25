@@ -84,28 +84,42 @@
             <ul class="sidebar-menu">
                 <li><a href="{{route('admins.index')}}" class="nav-link">Account Info</a></li>
                 <li><a href="{{route('admin.statistics')}}" class="nav-link">Statistics</a></li>
-                <li><a href="{{route('managers.list')}}" class="nav-link active">Hotels Manager Management</a></li>
-                <li><a href="{{route('customers.list')}}" class="nav-link">Users Management</a></li>
+                <li><a href="{{route('managers.list')}}" class="nav-link ">Hotels Manager Management</a></li>
+                <li><a href="{{route('customers.list')}}" class="nav-link active">Users Management</a></li>
             </ul>
         </aside>
 
         <!-- Main Content -->
         <main class="main-content">
             <div class="edit-form-container">
-                <h3>Edit Manager</h3>
+                <h3>Edit Customer</h3>
 
-            <form action="{{ route('manager.update', $manager->id) }}" method="POST">
+            <form action="{{ route('customer.update', $customer->id) }}" method="POST">
             @csrf
 
-            <label for="manager-name">Manager Name:</label>
-            <input type="text" id="manager-name" name="username" value="{{ $manager->username }}">
+            <label for="customer-name">Customer Name:</label>
+            <input type="text" id="customer-name" name="username" value="{{ $customer->username }}">
+            @error('username')
+                        <div class="alert alert-danger">{{ $message }}</div>
+            @enderror
 
-            <label for="manager-email">Email:</label>
-            <input type="email" id="manager-email" name="email" value="{{ $manager->email }}">
+            <label for="customer-birth-date">Birth Date:</label>
+            <input type="date" id="customer-birth-date" name="birth_date" value="{{ $customer->birth_date }}">
+            @error('birth_date')
+                        <div class="alert alert-danger">{{ $message }}</div>
+            @enderror
+            
+
+
+            <label for="customer-email">Email:</label>
+            <input type="email" id="customer-email" name="email" value="{{ $customer->email }}">
+            @error('email')
+                        <div class="alert alert-danger">{{ $message }}</div>
+            @enderror
 
             <div class="buttons">
                 <button type="submit" class="save-btn">Save Changes</button>
-                <a href="{{ route('managers.list') }}" class="cancel-btn">Cancel</a>
+                <a href="{{ route('customers.list') }}" class="cancel-btn">Cancel</a>
             </div>
         </form>
             </div>

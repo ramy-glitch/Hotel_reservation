@@ -49,6 +49,15 @@ Route::middleware('auth:admin')->group(function () {
     Route::get('/manager/search', [AdminController::class, 'searchHotelManager'])->name('manager.search');
 
 
+  
+    Route::get('/customer-management', [AdminController::class, 'showCustomers'])->name('customers.list');
+    Route::get('/customer/edit/{id}', [AdminController::class, 'editCustomer'])->name('customer.edit');
+    Route::post('/customer/update/{id}', [AdminController::class, 'updateCustomer'])->name('customer.update');
+    Route::get('/customer/delete/{id}', [AdminController::class, 'deleteCustomer'])->name('customer.delete');
+    Route::get('/customer/search', [AdminController::class, 'searchCustomer'])->name('customer.search');
+
+
+
 });
 
 // Hotel Manager Routes
