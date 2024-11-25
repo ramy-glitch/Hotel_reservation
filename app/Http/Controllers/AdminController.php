@@ -124,10 +124,36 @@ public function editHotelManager(Request $request,$id)
         return redirect()->route('managers.list')->with('error', 'Hotel Manager not found');
     }
 
-    return view('admins.editManager', compact('manager'));
+    return view('admins.editHotelManager', compact('manager'));
 
 
 }
+
+
+public function updateHotelManager(Request $request, $id)
+{
+    $manager = HotelManager::find($id);
+    if (!$manager) {
+        return redirect()->route('managers.list')->with('error', 'Hotel Manager not found');
+    }
+
+    $validator = Validator::make($request->all(), [
+        'username' => 'sometimes|required|unique:hotel_managers,username,' . $id . '|max:255',
+        'email' => 'sometimes|required|email|unique:hotel_managers,email,' . $id . '|max:255',
+
+    ]);
+
+    if ($validator->fails()) {
+        return redirect()->route('managers.edit', $id)
+                         ->withErrors($validator)
+                         ->withInput();
+    }
+
+    $manager->update($request->all());
+    return redirect()->route('managers.list')->with('success');
+}
+
+
 
 public function deleteHotelManager($id)
 {
@@ -139,6 +165,68 @@ public function deleteHotelManager($id)
     $manager->delete();
     return redirect()->route('managers.list')->with('success');
 }
+
+
+
+
+
+public function searchHotelManager(Request $request)
+{
+    $query = $request->input('search');
+    $managers2 = HotelManager::where('username', 'like', '%' . $query . '%')
+                            ->orWhere('email', 'like', '%' . $query . '%')
+                            ->get();
+
+    $html = view('partials.managersSearch', compact('managers2'))->render();
+    return response()->json(['html' => $html]);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /*************************************************************************************** */
+    public function createCustomerAccount(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'username' => 'required|unique:customers|max:255',
+            'email' => 'required|email|unique:customers|max:255',
+            'password' => 'required|min:8',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->route('customers.create')
+                             ->withErrors($validator)
+                             ->withInput();
+        }
+
+        $customer = Customer::create([
+            'username' => $request->username,
+            'email' => $request->email,
+            'password' => bcrypt($request->password),
+        ]);
+
+        return redirect()->route('customers.index')->with('success', 'Customer created successfully');
+    }
+
+
+
+
 
 
 

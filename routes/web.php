@@ -44,7 +44,9 @@ Route::middleware('auth:admin')->group(function () {
 
     Route::get('/manager-management', [AdminController::class, 'showHotelManagers'])->name('managers.list');
     Route::get('/manager/edit/{id}', [AdminController::class, 'editHotelManager'])->name('manager.edit');
+    Route::post('/manager/update/{id}', [AdminController::class, 'updateHotelManager'])->name('manager.update');
     Route::get('/manager/delete/{id}', [AdminController::class, 'deleteHotelManager'])->name('manager.delete');
+    Route::get('/manager/search', [AdminController::class, 'searchHotelManager'])->name('manager.search');
 
 
 });

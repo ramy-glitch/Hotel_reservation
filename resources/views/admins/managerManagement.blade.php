@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hotel Manager Management</title>
     <link rel="stylesheet" href="{{ asset('css/admin_style.css') }}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
     <div class="dashboard-container">
@@ -26,8 +27,10 @@
                 
                 <!-- Search Bar -->
                 <div class="search-container">
-                    <input type="text" placeholder="Search by manager name or ID" class="search-bar">
-                    <button class="search-button">Search</button>
+                    <form id="search-form">
+                        <input type="text" name="search" placeholder="Search by manager name or ID" class="search-bar">
+                        <button type="submit" class="search-button">Search</button>
+                    </form>
                    <a href="Add Manager.html"><button class="add-manager-button">Add Manager</button></a> 
                 </div>
 
@@ -41,7 +44,7 @@
                             <th>Actions</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id = "manager-grid">
                         @foreach($managers as $manager)
                             <tr>
                                 <td>{{ $manager->id }}</td>
@@ -64,5 +67,37 @@
             </section>
         </main>
     </div>
+
+    <script>
+$(document).ready(function() {
+    $('#search-form').on('submit', function(e) {
+        e.preventDefault();
+        const query = $('input[name="search"]').val();
+
+        $.ajax({
+            url: `{{ route('manager.search') }}?search=${query}`,
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+            },
+            success: function(response) {
+                const managersContainer = $('#manager-grid');
+                managersContainer.empty();
+
+                if (response.html.trim() === '') {
+                    managersContainer.html('<p>No managers found.</p>');
+                } else {
+                    managersContainer.html(response.html);
+                }
+            },
+            error: function(error) {
+                console.error('Error:', error);
+            }
+        });
+    });
+});
+</script>
+
+
 </body>
 </html>

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Manager</title>
-    <link rel="stylesheet" href="admin-style.css">
+    <link rel="stylesheet" href="{{ asset('css/admin_style.css') }}">
     <style>
         /* Center the content within the main section */
         .edit-form-container {
@@ -82,9 +82,10 @@
         <aside class="sidebar">
             <h2 class="sidebar-logo">Admin Dashboard</h2>
             <ul class="sidebar-menu">
-                <li><a href="admin-dashboard.html" class="nav-link">Users Management</a></li>
-                <li><a href="hotels-manager-management.html" class="nav-link active">Hotel Manager Management</a></li>
-                <li><a href="statistics.html" class="nav-link">Statistics</a></li>
+                <li><a href="{{route('admins.index')}}" class="nav-link">Account Info</a></li>
+                <li><a href="{{route('admin.statistics')}}" class="nav-link">Statistics</a></li>
+                <li><a href="{{route('managers.list')}}" class="nav-link active">Hotels Manager Management</a></li>
+                <li><a href="#" class="nav-link">Users Management</a></li>
             </ul>
         </aside>
 
@@ -92,21 +93,21 @@
         <main class="main-content">
             <div class="edit-form-container">
                 <h3>Edit Manager</h3>
-                <form action="hotels-manager-management.html" method="POST">
-                    <label for="manager-name">Manager Name:</label>
-                    <input type="text" id="manager-name" name="manager-name" value="Jane Doe">
 
-                    <label for="manager-email">Email:</label>
-                    <input type="email" id="manager-email" name="manager-email" value="jane.doe@example.com">
+            <form action="{{ route('manager.update', $manager->id) }}" method="POST">
+            @csrf
 
-                    <label for="hotel-assigned">Hotel Assigned:</label>
-                    <input type="text" id="hotel-assigned" name="hotel-assigned" value="Ocean View">
+            <label for="manager-name">Manager Name:</label>
+            <input type="text" id="manager-name" name="username" value="{{ $manager->username }}">
 
-                    <div class="buttons">
-                        <button type="submit" class="save-btn">Save Changes</button>
-                        <a href="hotels manager-management.html" class="cancel-btn">Cancel</a>
-                    </div>
-                </form>
+            <label for="manager-email">Email:</label>
+            <input type="email" id="manager-email" name="email" value="{{ $manager->email }}">
+
+            <div class="buttons">
+                <button type="submit" class="save-btn">Save Changes</button>
+                <a href="{{ route('managers.list') }}" class="cancel-btn">Cancel</a>
+            </div>
+        </form>
             </div>
         </main>
     </div>
