@@ -135,7 +135,7 @@ public function statistics(){
         $validator = Validator::make($request->all(), [
             'username' => 'sometimes|required|unique:customers,username,' . $customer_id . '|max:255',
             'email' => 'sometimes|required|email|unique:customers,email,' . $customer_id . '|max:255',
-            'password' => 'sometimes|required|min:6',
+            'password' => 'sometimes|required|min:8',
         ]);
 
         if ($validator->fails()) {
