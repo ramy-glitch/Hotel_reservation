@@ -228,6 +228,16 @@ public function updateCustomer(Request $request, $id)
     return redirect()->route('customers.list')->with('success');
 }
 
+public function deleteformCustomer($id)
+{
+    $customer = Customer::find($id);
+    if (!$customer) {
+        return redirect()->route('customers.list')->with('error', 'Customer not found');
+    }
+
+    return view('admins.deleteCustomer', compact('customer'));
+}
+
 public function deleteCustomer($id)
 {
     $customer = Customer::find($id);

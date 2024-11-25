@@ -53,6 +53,7 @@ Route::middleware('auth:admin')->group(function () {
     Route::get('/customer-management', [AdminController::class, 'showCustomers'])->name('customers.list');
     Route::get('/customer/edit/{id}', [AdminController::class, 'editCustomer'])->name('customer.edit');
     Route::post('/customer/update/{id}', [AdminController::class, 'updateCustomer'])->name('customer.update');
+    Route::get('/customer/deleteConfirmation/{id}', [AdminController::class, 'deleteformCustomer'])->name('customer.deleteform');
     Route::get('/customer/delete/{id}', [AdminController::class, 'deleteCustomer'])->name('customer.delete');
     Route::get('/customer/search', [AdminController::class, 'searchCustomer'])->name('customer.search');
 

@@ -56,7 +56,7 @@
                                         <a href="{{ route('customer.edit', $customer->id) }}">
                                             <button class="edit-btn">Edit</button>
                                         </a>
-                                        <a href="{{ route('customer.delete', $customer->id) }}">
+                                        <a href="{{ route('customer.deleteform', $customer->id) }}">
                                             <button class="delete-btn">Delete</button>
                                         </a>
                                     </div>
