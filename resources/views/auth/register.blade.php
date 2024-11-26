@@ -10,6 +10,7 @@
                 color: red;
             }
         </style>
+        <script src="{{ asset('js/script.js') }}" ></script>
     </head>
     <body>
         <header>
@@ -47,6 +48,16 @@
                     @error('password')
                         <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
+
+                    <ul class="password-conditions">
+                        <li id="length" class="invalid">Au moins 8 caractères</li>
+                        <li id="uppercase" class="invalid">Au moins une majuscule</li>
+                        <li id="lowercase" class="invalid">Au moins une minuscule</li>
+                        <li id="number" class="invalid">Au moins un chiffre</li>
+                        <li id="match" class="invalid">Les mots de passe doivent correspondre</li>
+                    </ul>
+
+
                     <button type="submit">create account</button>
                 </form>
                 <p>Already registered? <a href="{{ route('login') }}">Login here</a></p>
