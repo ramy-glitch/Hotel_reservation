@@ -1,3 +1,7 @@
+
+
+window.onload = function() {
+
 document.getElementById('email').addEventListener('input', validateEmail);
 document.getElementById('password').addEventListener('input', validatePassword);
 document.getElementById('repassword').addEventListener('input', validatePassword);
@@ -57,4 +61,6 @@ function updateCondition(id, condition) {
         element.classList.remove('valid');
         element.classList.add('invalid');
     }
+}
+
 }
