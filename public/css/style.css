@@ -139,7 +139,6 @@ label {
 }
 
 input[type="text"],
-input[type="date"],
 input[type="email"],
 input[type="tel"],
 input[type="password"] {
@@ -823,6 +822,25 @@ h1, h2, h3, h4, h5, h6 {
     border-bottom: none; 
     text-decoration: none; 
 }
+.valid {
+    color: green;
+}
 
+.invalid {
+    color: red;
+}
+
+.password-conditions {
+    list-style-type: none;
+    padding: 0;
+}
+
+.password-conditions li {
+    color: red;
+}
+
+.password-conditions .valid {
+    color: green;
+}
 
 

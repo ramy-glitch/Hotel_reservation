@@ -101,7 +101,7 @@
             <input type="text" id="manager-name" name="username" value="{{ $manager->username }}">
 
             <label for="manager-email">Email:</label>
-            <input type="email" id="manager-email" name="email" value="{{ $manager->email }}">
+            <input type="email" id="email" name="email" value="{{ $manager->email }}">
 
             <div class="buttons">
                 <button type="submit" class="save-btn">Save Changes</button>
@@ -111,5 +111,6 @@
             </div>
         </main>
     </div>
+    <script src="{{ asset('js/script.js') }}"></script>
 </body>
 </html>

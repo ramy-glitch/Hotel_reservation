@@ -59,8 +59,18 @@
                         <label for="confirm-password">Confirm New Password</label>
                         <input type="password" id="confirm-password" name="confirm-password" placeholder="Confirm new password" required>
 
+                        <ul class="password-conditions">
+                                    <li id="length" class="invalid">Au moins 8 caractères</li>
+                                    <li id="uppercase" class="invalid">Au moins une majuscule</li>
+                                    <li id="lowercase" class="invalid">Au moins une minuscule</li>
+                                    <li id="number" class="invalid">Au moins un chiffre</li>
+                                    <li id="match" class="invalid">Les mots de passe doivent correspondre</li>
+                                </ul> 
+
                         <button type="submit" class="update-button">Change Password</button>
                     </form>
+
+                    <script src="{{ asset('js/script.js') }}"></script>
                 </div>
 
                 <!-- Delete Account -->
