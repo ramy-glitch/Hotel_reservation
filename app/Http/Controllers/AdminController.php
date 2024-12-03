@@ -245,6 +245,16 @@ public function deleteCustomer($id)
         return redirect()->route('customers.list')->with('error', 'Customer not found');
     }
 
+            // Delete related notifications
+            $customer->notifications()->delete();
+
+            // Delete related reviews, reservations, etc.
+            $customer->reviews()->delete();
+            $customer->reservations()->delete();
+    
+            // Delete the customer
+            $customer->delete();
+
     $customer->delete();
     return redirect()->route('customers.list')->with('success');
 }
