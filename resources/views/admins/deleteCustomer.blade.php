@@ -91,9 +91,10 @@
                 <p><span class="info">Email:</span> {{ $customer->email }}</p>
                 <p><span class="info">Birth date:</span> {{ $customer->birth_date }}</p>
                 <div class="buttons">
-                    <form action="{{ route('customer.delete') }}" method="POST" style="display: inline;">
-                        <button type="submit" class="confirm-btn">Confirm Delete</button>
-                    </form>
+                <form action="{{ route('customer.delete', ['id' => $customer->id]) }}" method="GET" style="display: inline;">
+                    @csrf
+                    <button type="submit" class="confirm-btn">Confirm Delete</button>
+                </form>
                     <a href="{{ route('customers.list') }}" class="cancel-btn">Cancel</a>
                 </div>
             </div>
