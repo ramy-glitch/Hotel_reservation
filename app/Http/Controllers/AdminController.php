@@ -116,6 +116,8 @@ public function showHotelManagers()
     return view('admins.managerManagement', compact('managers'));
 }
 
+
+
 public function editHotelManager(Request $request,$id)
 {
     // Logic to edit manager
@@ -165,6 +167,8 @@ public function deleteformManager($id)
 
 
 
+
+
 public function deleteHotelManager($id)
 {
     $manager = HotelManager::find($id);
@@ -172,17 +176,44 @@ public function deleteHotelManager($id)
         return redirect()->route('managers.list')->with('error', 'Hotel Manager not found');
     }
 
+    // Delete related hotels and their related records
+    foreach ($manager->hotels as $hotel) {
+        // Delete related hotel photos
+        $hotel->photos()->delete();
+        
+        // Delete related rooms and their related records
+        foreach ($hotel->rooms as $room) {
+            // Delete related room photos
+            $room->photos()->delete();
+            
+            // Delete related reservation rooms
+            $room->reservations()->detach();
+            
+            // Delete the room
+            $room->delete();
+        }
 
+        // Delete related services
+        $hotel->services()->delete();
 
-    // Delete related hotels
-    $manager->hotels()->delete();
+        // Delete related reviews
+        $hotel->reviews()->delete();
+
+        // Delete related reservations
+        foreach ($hotel->reservations as $reservation) {
+            $reservation->rooms()->detach();
+            $reservation->delete();
+        }
+
+        // Delete the hotel
+        $hotel->delete();
+    }
 
     // Delete the manager
     $manager->delete();
 
-    return redirect()->route('managers.list')->with('success');
+    return redirect()->route('managers.list')->with('success', 'Hotel Manager deleted successfully');
 }
-
 
 
 

@@ -43,7 +43,8 @@ CREATE TABLE services (
     cost DOUBLE,
     created_at TIMESTAMP NULL DEFAULT NULL,
     updated_at TIMESTAMP NULL DEFAULT NULL,
-    PRIMARY KEY (id)
+    PRIMARY KEY (id),
+    FOREIGN KEY (hotel_id) REFERENCES hotels(id)
 );
 
 CREATE TABLE hotels (
@@ -52,6 +53,7 @@ CREATE TABLE hotels (
     location VARCHAR(255) NOT NULL,
     child_age_limit INTEGER NOT NULL,
     manager_id INTEGER,
+    hotel_id INTEGER,
     created_at TIMESTAMP NULL DEFAULT NULL,
     updated_at TIMESTAMP NULL DEFAULT NULL,
     PRIMARY KEY (id),
@@ -144,4 +146,3 @@ CREATE TABLE room_photos (
     PRIMARY KEY (id),
     FOREIGN KEY (room_id) REFERENCES rooms(id)
 );
-
