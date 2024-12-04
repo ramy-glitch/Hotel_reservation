@@ -153,6 +153,16 @@ public function updateHotelManager(Request $request, $id)
     return redirect()->route('managers.list')->with('success');
 }
 
+public function deleteformManager($id)
+{
+    $manager = HotelManager::find($id);
+    if (!$manager) {
+        return redirect()->route('managers.list')->with('error', 'Hotel Manager not found');
+    }
+
+    return view('admins.deleteHotelManager', compact('manager'));
+}
+
 
 
 public function deleteHotelManager($id)
@@ -162,7 +172,14 @@ public function deleteHotelManager($id)
         return redirect()->route('managers.list')->with('error', 'Hotel Manager not found');
     }
 
+
+
+    // Delete related hotels
+    $manager->hotels()->delete();
+
+    // Delete the manager
     $manager->delete();
+
     return redirect()->route('managers.list')->with('success');
 }
 
