@@ -84,9 +84,10 @@
         <aside class="sidebar">
             <h2 class="sidebar-logo">Admin Dashboard</h2>
             <ul class="sidebar-menu">
-                <li><a href="admin-dashboard.html" class="nav-link">Users Management</a></li>
-                <li><a href="hotels manager-management.html" class="nav-link active">Hotel Manager Management</a></li>
-                <li><a href="statistics.html" class="nav-link">Statistics</a></li>
+                <li><a href="{{route('admins.index')}}" class="nav-link">Account Info</a></li>
+                <li><a href="{{route('admin.statistics')}}" class="nav-link">Statistics</a></li>
+                <li><a href="{{route('managers.list')}}" class="nav-link ">Hotels Manager Management</a></li>
+                <li><a href="{{route('customers.list')}}" class="nav-link active">Users Management</a></li>
             </ul>
         </aside>
 
@@ -105,14 +106,9 @@
                         <input type="email" id="manager-email" name="manager-email" placeholder="Enter manager email" required>
                     </div>
 
-                    <div class="form-group">
-                        <label for="hotel-assigned">Hotel Assigned:</label>
-                        <input type="text" id="hotel-assigned" name="hotel-assigned" placeholder="Enter hotel name" required>
-                    </div>
-
                     <div class="form-actions">
                         <button type="submit" class="save-btn">Save</button>
-                        <a href="hotels manager-management.html" class="cancel-btn">Cancel</a>
+                        <a href="{{ route('managers.list') }}" class="cancel-btn">Cancel</a>
                     </div>
                 </form>
             </div>
