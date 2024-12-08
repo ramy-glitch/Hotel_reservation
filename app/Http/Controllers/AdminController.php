@@ -252,14 +252,21 @@ public function createHotelManagerForm()
 
 
 
-
-public function createHotelManager(Request $request)
+public function storeHotelManager(Request $request)
 {
+
+
+    $messages = [
+        'username.unique' => 'The username has already been taken.',
+        'email.unique' => 'The email has already been taken.',
+        'password.regex' => 'The password must contain at least one uppercase letter, one lowercase letter, one special character, and be at least 8 characters long.',
+    ];
+
     $validator = Validator::make($request->all(), [
         'username' => 'required|unique:hotel_managers|max:255',
         'email' => 'required|email|unique:hotel_managers|max:255',
         'password' => 'required|string|min:8|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*\W).+$/',
-    ]);
+    ], $messages);
 
     if ($validator->fails()) {
         return redirect()->route('manager.create')
@@ -386,29 +393,8 @@ public function searchCustomer(Request $request)
 
 
 
-    /*************************************************************************************** */
-    public function createCustomerAccount(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'username' => 'required|unique:customers|max:255',
-            'email' => 'required|email|unique:customers|max:255',
-            'password' => 'required|min:8',
-        ]);
 
-        if ($validator->fails()) {
-            return redirect()->route('customers.create')
-                             ->withErrors($validator)
-                             ->withInput();
-        }
 
-        $customer = Customer::create([
-            'username' => $request->username,
-            'email' => $request->email,
-            'password' => bcrypt($request->password),
-        ]);
-
-        return redirect()->route('customers.index')->with('success', 'Customer created successfully');
-    }
 
 
 

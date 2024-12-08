@@ -98,13 +98,21 @@
                 <form action="{{ route('manager.store') }}" method="POST">
                     @csrf
                     <div class="form-group">
-                        <label for="manager-name">Manager Name:</label>
-                        <input type="text" id="manager-name" name="manager-name" placeholder="Enter manager name" required>
+                        <label for="manager-username">Manager Username:</label>
+                        <input type="text" id="manager-username" name="username" placeholder="Enter manager username" required>
+                        <div> @error('username') <span style="color: red;">{{ $message }}</span> @enderror </div>
                     </div>
 
                     <div class="form-group">
                         <label for="manager-email">Email:</label>
-                        <input type="email" id="manager-email" name="manager-email" placeholder="Enter manager email" required>
+                        <input type="email" id="manager-email" name="email" placeholder="Enter manager email" required>
+                        <div> @error('email') <span style="color: red;">{{ $message }}</span> @enderror </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="manager-password">Password:</label>
+                        <input type="password" id="manager-password" name="password" placeholder="Enter manager password" required>
+                        <div> @error('password') <span style="color: red;">{{ $message }}</span> @enderror </div>   
                     </div>
 
                     <div class="form-actions">
