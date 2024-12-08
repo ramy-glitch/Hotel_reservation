@@ -95,7 +95,7 @@
         <main class="main-content">
             <div class="form-container">
                 <h3>Add Manager</h3>
-                <form action="save-manager.php" method="POST">
+                <form action="{{ route('manager.store') }}" method="POST">
                     <div class="form-group">
                         <label for="manager-name">Manager Name:</label>
                         <input type="text" id="manager-name" name="manager-name" placeholder="Enter manager name" required>
