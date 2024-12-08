@@ -258,11 +258,11 @@ public function createHotelManager(Request $request)
     $validator = Validator::make($request->all(), [
         'username' => 'required|unique:hotel_managers|max:255',
         'email' => 'required|email|unique:hotel_managers|max:255',
-        'password' => 'required|string|min:8|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*\W).+$/|different:current-password',
+        'password' => 'required|string|min:8|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*\W).+$/',
     ]);
 
     if ($validator->fails()) {
-        return redirect()->route('managers.create')
+        return redirect()->route('manager.create')
                          ->withErrors($validator)
                          ->withInput();
     }

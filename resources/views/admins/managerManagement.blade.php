@@ -31,7 +31,7 @@
                         <input type="text" name="search" placeholder="Search manager" class="search-bar">
                         <button type="submit" class="search-button">Search</button>
                     </form>
-                   <a href="Add Manager.html"><button class="add-manager-button">Add Manager</button></a> 
+                   <a href="{{ route('manager.create') }}"><button class="add-manager-button">Add Manager</button></a> 
                 </div>
 
                 <!-- Managers Table -->

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Manager</title>
-    <link rel="stylesheet" href="admin-style.css">
+    <link rel="stylesheet" href="{{ asset('css/admin_style.css') }}">
     <style>
         /* Form Styling */
         .form-container {
@@ -96,6 +96,7 @@
             <div class="form-container">
                 <h3>Add Manager</h3>
                 <form action="{{ route('manager.store') }}" method="POST">
+                    @csrf
                     <div class="form-group">
                         <label for="manager-name">Manager Name:</label>
                         <input type="text" id="manager-name" name="manager-name" placeholder="Enter manager name" required>

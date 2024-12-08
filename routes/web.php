@@ -48,11 +48,11 @@ Route::middleware('auth:admin')->group(function () {
     Route::get('/manager/deleteConfirmation/{id}', [AdminController::class, 'deleteformManager'])->name('manager.deleteform');
     Route::get('/manager/delete/{id}', [AdminController::class, 'deleteHotelManager'])->name('manager.delete');
     Route::get('/manager/search', [AdminController::class, 'searchHotelManager'])->name('manager.search');
-    Route::get('/manager/create', [AdminController::class, 'createHotelManager'])->name('manager.create');
+    Route::get('/manager/create', [AdminController::class, 'createHotelManagerForm'])->name('manager.create');
     Route::post('/manager/store', [AdminController::class, 'storeHotelManager'])->name('manager.store');
 
 
-  
+
     Route::get('/customer-management', [AdminController::class, 'showCustomers'])->name('customers.list');
     Route::get('/customer/edit/{id}', [AdminController::class, 'editCustomer'])->name('customer.edit');
     Route::post('/customer/update/{id}', [AdminController::class, 'updateCustomer'])->name('customer.update');
