@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+
 use App\Models\Admin;
 use App\Models\Customer;
 use Illuminate\Http\Request;
@@ -21,6 +22,11 @@ class AdminController extends Controller
         return view('admins.index', compact('admin'));
     }
 
+    
+    
+    
+    
+    
     public function updateUsername(Request $request, $id)
     {
         $admin = Admin::find($id);
@@ -46,6 +52,12 @@ class AdminController extends Controller
         return response()->json(['success' => 'Username  updated successfully']);
     }
 
+
+
+   
+   
+   
+   
     public function updatePassword(Request $request, $id)
 {
     $admin = Admin::find($id);
@@ -77,14 +89,14 @@ class AdminController extends Controller
 
     return response()->json(['success' => 'Password updated successfully']);
 }
-    
 
 
 
 
 
-public function destroy($id)
-{
+
+
+public function destroy($id){
     $admin = Admin::find($id);
 
     Auth::logout();
@@ -231,10 +243,50 @@ public function searchHotelManager(Request $request)
 
 
 
+
+public function createHotelManagerForm()
+{
+    return view('admins.addHotelManager');
+}
+
+
+
+
+
+public function createHotelManager(Request $request)
+{
+    $validator = Validator::make($request->all(), [
+        'username' => 'required|unique:hotel_managers|max:255',
+        'email' => 'required|email|unique:hotel_managers|max:255',
+        'password' => 'required|string|min:8|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*\W).+$/|different:current-password',
+    ]);
+
+    if ($validator->fails()) {
+        return redirect()->route('managers.create')
+                         ->withErrors($validator)
+                         ->withInput();
+    }
+
+    $manager = HotelManager::create([
+        'username' => $request->username,
+        'email' => $request->email,
+        'password' => bcrypt($request->password),
+    ]);
+
+    return redirect()->route('managers.list')->with('success');
+}
+
+
+
+
 public function showCustomers(){
     $customers = Customer::all();
     return view('admins.customerManagement', compact('customers'));
 }
+
+
+
+
 
 public function editCustomer(Request $request,$id)
 {
