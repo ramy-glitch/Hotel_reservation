@@ -118,6 +118,8 @@ class HotelController extends Controller
     /*************************************  main code  ************************************** */
 
 
+    
+
     public function index()
     {
         $hotels = Hotel::with(['firstPhoto', 'reviews'])->get();
@@ -135,10 +137,6 @@ class HotelController extends Controller
         return view('customers.hotels', compact('hotels'));
     }
     
-
-
-
-
 
 
 
