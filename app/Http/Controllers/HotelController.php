@@ -115,7 +115,7 @@ class HotelController extends Controller
 
 
 
-    /*************************************************************************** */
+    /*************************************  main code  ************************************** */
 
 
     public function index()
@@ -230,4 +230,11 @@ class HotelController extends Controller
         return response()->json(['html' => $html]);
     }
 
+
+/*************************************  main code  ************************************** */
+
+
+
 }
+
+

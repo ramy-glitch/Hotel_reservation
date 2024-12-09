@@ -54,10 +54,10 @@ class AdminController extends Controller
 
 
 
-   
-   
-   
-   
+    
+    
+    
+    
     public function updatePassword(Request $request, $id)
 {
     $admin = Admin::find($id);
