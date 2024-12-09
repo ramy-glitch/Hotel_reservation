@@ -79,9 +79,6 @@ class HotelManagerController extends Controller
     
 
 
-
-
-
 public function destroy($id)
 {
     $hotelManager = HotelManager::find($id);
@@ -103,7 +100,7 @@ public function destroy($id)
 
 
 
-    /******************************************** */
+    /********************** Hotels Operations ********************** */
 
     public function storehotel(Request $request)
     {
