@@ -10,13 +10,13 @@ class HotelPhotoSeeder extends Seeder
     public function run()
     {
         HotelPhoto::create([
-            'photo_url' => 'https://example.com/hotel1/photo1.jpg',
-            'hotel_id' => 5,
+            'photo_url' => 'img1.jpg',
+            'hotel_id' => 1,
         ]);
 
         HotelPhoto::create([
-            'photo_url' => 'https://example.com/hotel2/photo1.jpg',
-            'hotel_id' => 6,
+            'photo_url' => 'img1.jpg',
+            'hotel_id' => 2,
         ]);
     }
 }

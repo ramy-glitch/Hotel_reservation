@@ -10,14 +10,14 @@ class HotelManagerSeeder extends Seeder
     public function run()
     {
         HotelManager::create([
-            'username' => 'manager7',
-            'email' => 'manager7@example.com',
+            'username' => 'manager1',
+            'email' => 'manager1@example.com',
             'password' => bcrypt('password'),
         ]);
 
         HotelManager::create([
-            'username' => 'manager8',
-            'email' => 'manager8@example.com',
+            'username' => 'manager2',
+            'email' => 'manager2@example.com',
             'password' => bcrypt('password'),
         ]);
     }

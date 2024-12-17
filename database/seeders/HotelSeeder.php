@@ -13,14 +13,14 @@ class HotelSeeder extends Seeder
             'hotelname' => 'Hotel California',
             'location' => 'Los Angeles, CA',
             'child_age_limit' => 12,
-            'manager_id' => 7,
+            'manager_id' => 1,
         ]);
 
         Hotel::create([
             'hotelname' => 'The Grand Budapest Hotel',
             'location' => 'Budapest, Hungary',
             'child_age_limit' => 10,
-            'manager_id' => 8,
+            'manager_id' => 1,
         ]);
     }
 }
