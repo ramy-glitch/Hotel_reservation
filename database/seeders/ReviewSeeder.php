@@ -12,15 +12,15 @@ class ReviewSeeder extends Seeder
         Review::create([
             'rating' => 5,
             'review_comment' => 'Excellent service!',
-            'customer_id' => 7,
-            'hotel_id' => 5,
+            'customer_id' => 3,
+            'hotel_id' => 1,
         ]);
 
         Review::create([
             'rating' => 4,
             'review_comment' => 'Very good experience.',
-            'customer_id' => 8,
-            'hotel_id' => 6,
+            'customer_id' => 2,
+            'hotel_id' => 1,
         ]);
     }
 }

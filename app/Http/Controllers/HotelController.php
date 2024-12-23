@@ -232,7 +232,13 @@ class HotelController extends Controller
     public function getHotelDetails($id)
     {
         $hotel = Hotel::findOrFail($id);
+
         $hotel->load('photos');
+        $hotel->load('firstPhoto');
+        $hotel->load('reviews');
+        $hotel->global_rating = $hotel->reviews->avg('rating') ?? 'No rating available';
+        $hotel->load('rooms');
+        $hotel->general_price = $hotel->rooms->min('adult_price') ?? 'No price available';
         return view('customers.hotelDetails', compact('hotel'));
     }
 

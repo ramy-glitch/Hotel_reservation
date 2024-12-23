@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hotel Details</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 </head>
 <body>
 <div class="dashboard-container">
@@ -21,14 +21,14 @@
 
         <main class="main-content">
             <section id="hotel-details" class="section active">
-                <h3>{{ $hotel->name }}</h3>
-                <p class="address">
+                <h3> {{ $hotel->hotelname }}</h3>
+                <p class="address" style="color: #333;font-size: 1.2rem; margin-bottom: 1rem;">
                     {{ $hotel->location}}
                 </p>
 
                 <!-- Image Gallery -->
                 <div class="hotel-gallery">
-                    <img src="hotel_main.jpg" alt="Hotel Main Image" class="main-image">
+                    <img src="{{ asset('images/' . $hotel->firstPhoto->photo_url) }}" alt="Hotel Image" class="main-image">
                     <div class="thumbnail-gallery">
                         @foreach($hotel->photos as $photo)
                             <img src="{{ asset('images/' . $photo->photo_url) }}" alt="Hotel Thumbnail" class="thumbnail-image">
@@ -39,12 +39,12 @@
                 <!-- Hotel Details -->
                 <div class="hotel-info">
                     <div class="summary">
-                        <span class="rating">Pleasant 6.4</span>
-                        <span class="location-rating">Great location! 8.3</span>
+                        <span class="rating">Rating: ⭐{{ $hotel->global_rating }}</span>
+                        <span class="location-rating">Price: ${{ $hotel->general_price }}/night</span>
                     </div>
 
                     <h4>Description</h4>
-                    <p>Enjoy stunning ocean views and modern amenities for an unforgettable stay at Ocean View Resort.</p>
+                    <p>Enjoy stunning ocean views and modern amenities for an unforgettable stay at {{ $hotel->hotelname }}.</p>    
                     
                     <h4>Services</h4>
                     <div class="services">
@@ -59,7 +59,7 @@
                     </div>
 
                     <h4>Price</h4>
-                    <p>$200 per night</p>
+                    <p>${{ $hotel->general_price }} per night</p>
 
                     <a href="booking.html" class="book-now-button">Book Now</a>
                 </div>
