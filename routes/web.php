@@ -83,4 +83,7 @@ Route::middleware('auth:customer')->group(function () {
     Route::delete('customers/{id}', [CustomerController::class, 'destroy'])->name('customer.destroy');
     Route::get('hotels/search', [HotelController::class, 'search'])->name('hotels.search');
     Route::get('hotel-details/{id}', [HotelController::class, 'getHotelDetails'])->name('hotels.hotelDetails');
+    Route::post('reviews', [ReviewController::class, 'store'])->name('reviews.store');
+    Route::put('reviews/{review}', [ReviewController::class, 'update'])->name('reviews.update');
+    Route::delete('reviews/{review}', [ReviewController::class, 'destroy'])->name('reviews.destroy');
 });

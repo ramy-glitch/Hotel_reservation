@@ -236,9 +236,11 @@ class HotelController extends Controller
         $hotel->load('photos');
         $hotel->load('firstPhoto');
         $hotel->load('reviews');
+        $hotel->reviews->load('customer');
         $hotel->global_rating = $hotel->reviews->avg('rating') ?? 'No rating available';
         $hotel->load('rooms');
         $hotel->general_price = $hotel->rooms->min('adult_price') ?? 'No price available';
+        $hotel->load('availableServices');
         return view('customers.hotelDetails', compact('hotel'));
     }
 

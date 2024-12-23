@@ -53,6 +53,11 @@ class Hotel extends Model
         return $this->hasMany(Service::class);
     }
 
+    public function availableServices()
+    {
+        return $this->services()->where('availability', true);
+    }
+
     public function reservations()
     {
         return $this->hasMany(Reservation::class);

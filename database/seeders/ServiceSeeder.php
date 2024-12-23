@@ -14,6 +14,7 @@ class ServiceSeeder extends Seeder
             'description' => '24/7 room service',
             'availability' => true,
             'cost' => 50.00,
+            'hotel_id' => 1,
         ]);
 
         Service::create([
@@ -21,6 +22,23 @@ class ServiceSeeder extends Seeder
             'description' => 'Laundry service',
             'availability' => true,
             'cost' => 20.00,
+            'hotel_id' => 1,
+        ]);
+
+        Service::create([
+            'servicename' => 'Airport Transfer',
+            'description' => 'Airport transfer service',
+            'availability' => true,
+            'cost' => 100.00,
+            'hotel_id' => 1,
+        ]);
+
+        Service::create([
+            'servicename' => 'Spa',
+            'description' => 'Spa service',
+            'availability' => true,
+            'cost' => 150.00,
+            'hotel_id' => 1,
         ]);
     }
 }

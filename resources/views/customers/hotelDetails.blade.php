@@ -48,39 +48,75 @@
                     
                     <h4>Services</h4>
                     <div class="services">
-                        <span>Breakfast</span>
-                        <span>2 Restaurants</span>
-                        <span>Private Bathroom</span>
-                        <span>Ocean View</span>
-                        <span>Free Wi-Fi</span>
-                        <span>Airport Shuttle (free)</span>
-                        <span>Air Conditioning</span>
-                        <span>Non-Smoking Rooms</span>
+                        @foreach($hotel->availableServices as $service)
+                            <span>{{ $service->servicename }}</span>
+                        @endforeach
                     </div>
 
                     <h4>Price</h4>
                     <p>${{ $hotel->general_price }} per night</p>
 
-                    <a href="booking.html" class="book-now-button">Book Now</a>
+                    <a href="booking.html" class="book-now-button" style="text-decoration: none;">Book Now</a>
                 </div>
 
                 <!-- User Reviews Section -->
-                <div class="reviews-section">
+                <div class="reviews-section"><br><br>
                     <h4>Reviews</h4>
 
                     <!-- Display Existing Reviews -->
-                    <div class="existing-reviews">
-                        <p><strong>John Doe:</strong> Amazing hotel! The view is breathtaking. Highly recommend. ⭐⭐⭐⭐</p>
-                        <p><strong>Jane Smith:</strong> Great location, but the room service could be better. ⭐⭐⭐</p>
-                    </div>
+                <div class="existing-reviews">
+                    @foreach ($hotel->reviews as $review)
+                        <div class="review">
+                            <div class="review-header">
+                                <span class="review-author"><strong>{{ $review->customer->username }}</strong></span>
+                                <span class="review-date">{{ $review->created_at->format('M d, Y') }}</span>
+                            </div>
+                            <div class="review-body">
+                                <p>{{ $review->review_comment }}</p>
+                            </div>
+                            <div class="review-rating">
+                                Rating: ⭐{{ $review->rating }}
+                            </div>
+                            @if(auth()->id() == $review->customer_id)
+                                <!-- Update Review Form -->
+                                <form action="{{ route('reviews.update', $review->id) }}" method="POST">
+                                    @csrf
+                                    @method('PUT')
+                                    <textarea name="comment" rows="2" required>{{ $review->review_comment }}</textarea>
+                                    <select name="rating" required>
+                                        <option value="5" {{ $review->rating == 5 ? 'selected' : '' }}>⭐⭐⭐⭐⭐ - Excellent</option>
+                                        <option value="4" {{ $review->rating == 4 ? 'selected' : '' }}>⭐⭐⭐⭐ - Good</option>
+                                        <option value="3" {{ $review->rating == 3 ? 'selected' : '' }}>⭐⭐⭐ - Average</option>
+                                        <option value="2" {{ $review->rating == 2 ? 'selected' : '' }}>⭐⭐ - Poor</option>
+                                        <option value="1" {{ $review->rating == 1 ? 'selected' : '' }}>⭐ - Terrible</option>
+                                    </select>
+                                    <button type="submit" class="submit-review-button">Update Review</button>
+                                </form>
+
+                                <!-- Delete Review Form -->
+                                <form action="{{ route('reviews.destroy', $review->id) }}" method="POST" style="display:inline;">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="delete-review-button">Delete Review</button>
+                                </form>
+                            @endif
+                        </div>
+                    @endforeach
+                    
+                </div>
 
                     <!-- Add New Review -->
                     <div class="add-review">
                         <h5>Leave a Review</h5>
-                        <form action="submit-review.php" method="POST">
+                        <form action="{{ route('reviews.store') }}" method="POST">
+                            @csrf
+                            <!-- Hotel ID -->
+                            <input type="hidden" name="hotel_id" value="{{ $hotel->id }}">
+
                             <!-- Comment input -->
                             <label for="comment">Your Comment:</label>
-                            <textarea id="comment" name="comment" rows="4" placeholder="Write your review here..." required></textarea>
+                            <textarea id="comment" name="comment" rows="4" placeholder="Write your review here..." required oninput="updateCommentLength()"></textarea>
+                            <div id="comment-length">0/255 characters</div>
 
                             <!-- Rating -->
                             <label for="rating">Your Rating:</label>
@@ -100,5 +136,23 @@
             </section>
         </main>
     </div>
+
+    <script>
+            function updateCommentLength() {
+                const comment = document.getElementById('comment');
+                const commentLength = document.getElementById('comment-length');
+                const maxLength = 255;
+                const currentLength = comment.value.length;
+
+                commentLength.textContent = `${currentLength}/${maxLength} characters`;
+
+                if (currentLength > maxLength) {
+                    commentLength.style.color = 'red';
+                } else {
+                    commentLength.style.color = 'black';
+                }
+            }
+    </script>
+
 </body>
 </html>
