@@ -94,11 +94,13 @@
                                 </form>
 
                                 <!-- Delete Review Form -->
-                                <form action="{{ route('reviews.destroy', $review->id) }}" method="POST" style="display:inline;">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="delete-review-button">Delete Review</button>
-                                </form>
+                                <div class="delete-review-container">
+                                    <form action="{{ route('reviews.destroy', $review->id) }}" method="POST" style="display:inline;" onsubmit="return confirmDelete()">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="delete-review-button">Delete Review</button>
+                                    </form>
+                                </div>
                             @endif
                         </div>
                     @endforeach
@@ -106,32 +108,35 @@
                 </div>
 
                     <!-- Add New Review -->
-                    <div class="add-review">
-                        <h5>Leave a Review</h5>
-                        <form action="{{ route('reviews.store') }}" method="POST">
-                            @csrf
-                            <!-- Hotel ID -->
-                            <input type="hidden" name="hotel_id" value="{{ $hotel->id }}">
+                    @if(!auth()->user()->reviews()->where('hotel_id', $hotel->id)->exists())
+                        <div class="add-review">
+                            <h5>Leave a Review</h5>
+                            <form action="{{ route('reviews.store') }}" method="POST">
+                                @csrf
+                                <div class="comment-error" style="color: red;">{{ session('error') }}</div>
+                                <!-- Hotel ID -->
+                                <input type="hidden" name="hotel_id" value="{{ $hotel->id }}">
 
-                            <!-- Comment input -->
-                            <label for="comment">Your Comment:</label>
-                            <textarea id="comment" name="comment" rows="4" placeholder="Write your review here..." required oninput="updateCommentLength()"></textarea>
-                            <div id="comment-length">0/255 characters</div>
+                                <!-- Comment input -->
+                                <label for="comment">Your Comment:</label>
+                                <textarea id="comment" name="comment" rows="4" placeholder="Write your review here..." required oninput="updateCommentLength()"></textarea>
+                                <div id="comment-length">0/255 characters</div>
 
-                            <!-- Rating -->
-                            <label for="rating">Your Rating:</label>
-                            <select id="rating" name="rating" required>
-                                <option value="5">⭐⭐⭐⭐⭐ - Excellent</option>
-                                <option value="4">⭐⭐⭐⭐ - Good</option>
-                                <option value="3">⭐⭐⭐ - Average</option>
-                                <option value="2">⭐⭐ - Poor</option>
-                                <option value="1">⭐ - Terrible</option>
-                            </select>
+                                <!-- Rating -->
+                                <label for="rating">Your Rating:</label>
+                                <select id="rating" name="rating" required>
+                                    <option value="5">⭐⭐⭐⭐⭐ - Excellent</option>
+                                    <option value="4">⭐⭐⭐⭐ - Good</option>
+                                    <option value="3">⭐⭐⭐ - Average</option>
+                                    <option value="2">⭐⭐ - Poor</option>
+                                    <option value="1">⭐ - Terrible</option>
+                                </select>
 
-                            <!-- Submit button -->
-                            <button type="submit" class="submit-review-button">Submit Review</button>
-                        </form>
-                    </div>
+                                <!-- Submit button -->
+                                <button type="submit" class="submit-review-button">Submit Review</button>
+                            </form>
+                        </div>
+                    @endif
                 </div>
             </section>
         </main>
@@ -151,6 +156,10 @@
                 } else {
                     commentLength.style.color = 'black';
                 }
+            }
+
+            function confirmDelete() {
+                return confirm('Are you sure you want to delete this review?');
             }
     </script>
 

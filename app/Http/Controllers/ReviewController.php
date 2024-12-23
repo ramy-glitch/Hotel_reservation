@@ -16,14 +16,27 @@ class ReviewController extends Controller
         $request->validate([
             'comment' => 'required|string|max:255',
             'rating' => 'required|integer|min:1|max:5',
+            'hotel_id' => 'required|exists:hotels,id', // Validate that hotel_id is required and exists in the hotels table
         ]);
-    
+
+        $customer_id = auth()->id();
+        $hotel_id = $request->hotel_id;
+
+        // Check if the customer has already commented on this hotel
+        $existingReview = Review::where('customer_id', $customer_id)
+                                ->where('hotel_id', $hotel_id)
+                                ->first();
+
+        if ($existingReview) {
+            return redirect()->back()->with('error', 'You have already submitted a review for this hotel.');
+        }
+
         $review = new Review();
         $review->review_comment  = $request->comment;
         $review->rating = $request->rating;
-        $review->customer_id = auth()->id(); // Assuming the user is authenticated
-        $review->hotel_id = $request->hotel_id; // Make sure to pass the hotel_id in the form
-    
+        $review->customer_id = $customer_id;
+        $review->hotel_id = $hotel_id;
+
         $review->save();
         return redirect()->back()->with('success', 'Review submitted successfully!');
     }

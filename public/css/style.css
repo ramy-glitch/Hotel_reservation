@@ -898,3 +898,22 @@ textarea:focus {
     outline: none;
     box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1), 0 0 8px rgba(102, 175, 233, 0.6);
 }
+
+.delete-review-container {
+    text-align: center; /* Center the content horizontally */
+    margin-top: 10px; /* Optional: Add some margin for spacing */
+}
+
+.delete-review-button {
+    color: white; /* Change this to your desired text color */
+    background-color: red; /* Change this to your desired background color */
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+}
+
+.delete-review-button:hover {
+    background-color: darkred; /* Optional: Change the background color on hover */
+}

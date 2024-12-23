@@ -237,7 +237,9 @@ class HotelController extends Controller
         $hotel->load('firstPhoto');
         $hotel->load('reviews');
         $hotel->reviews->load('customer');
-        $hotel->global_rating = $hotel->reviews->avg('rating') ?? 'No rating available';
+        // round the average rating to the number of 2 decimal places
+        $hotel->global_rating = $hotel->reviews->avg('rating') ? number_format($hotel->reviews->avg('rating'), 1) : 'No rating available';
+        
         $hotel->load('rooms');
         $hotel->general_price = $hotel->rooms->min('adult_price') ?? 'No price available';
         $hotel->load('availableServices');
