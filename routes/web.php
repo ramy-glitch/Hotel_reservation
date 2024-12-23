@@ -71,6 +71,7 @@ Route::middleware('auth:hotel_manager')->group(function () {
     Route::post('hotel-managers/{id}/update-password', [HotelManagerController::class, 'updatePassword'])->name('hotelManager.updatePassword');
     Route::delete('hotel-managers/{id}', [HotelManagerController::class, 'destroy'])->name('hotelManager.destroy');
 
+
 });
 
 // Customer Routes
@@ -81,4 +82,5 @@ Route::middleware('auth:customer')->group(function () {
     Route::post('customers/{id}/update-password', [CustomerController::class, 'updatePassword'])->name('customer.updatePassword');
     Route::delete('customers/{id}', [CustomerController::class, 'destroy'])->name('customer.destroy');
     Route::get('hotels/search', [HotelController::class, 'search'])->name('hotels.search');
+    Route::get('hotel-details/{id}', [HotelController::class, 'getHotelDetails'])->name('hotels.hotelDetails');
 });

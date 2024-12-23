@@ -15,6 +15,8 @@ class HotelController extends Controller
 
     
 
+    
+    /** ************************************************* */
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -78,11 +80,7 @@ class HotelController extends Controller
         return redirect()->route('hotels.index')->with('success', 'Hotel deleted successfully');
     }
 
-    public function getHotelDetails($id)
-    {
-        $hotel = Hotel::findOrFail($id);
-        return view('hotels.details', compact('hotel'));
-    }
+
 
     public function getRooms($id)
     {
@@ -228,6 +226,15 @@ class HotelController extends Controller
         return response()->json(['html' => $html]);
     }
 
+
+
+
+    public function getHotelDetails($id)
+    {
+        $hotel = Hotel::findOrFail($id);
+        $hotel->load('photos');
+        return view('customers.hotelDetails', compact('hotel'));
+    }
 
 /*************************************  main code  ************************************** */
 

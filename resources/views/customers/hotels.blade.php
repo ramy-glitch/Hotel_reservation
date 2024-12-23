@@ -57,7 +57,7 @@
                     <h4>{{ $hotel->hotelname }}</h4>
                     <p>Location: {{ $hotel->location }}</p>
                     <p>Rating: ⭐{{ $hotel->rating }}</p>
-                    <button class="details-button" onclick="location.href='#'">View Details</button>
+                    <a class="details-button" href="{{ route('hotels.hotelDetails', ['id' => $hotel->id]) }}" style="text-decoration: none;">View Details</a>
                 </div>
             </div>
             @endforeach
