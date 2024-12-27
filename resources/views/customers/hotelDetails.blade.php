@@ -56,7 +56,7 @@
                     <h4>Price</h4>
                     <p>${{ $hotel->general_price }} per night</p>
 
-                    <a href="booking.html" class="book-now-button" style="text-decoration: none;">Book Now</a>
+                    <a href="{{route('customers.booking')}}" class="book-now-button" style="text-decoration: none;">Book Now</a>
                 </div>
 
                 <!-- User Reviews Section -->
