@@ -44,7 +44,7 @@ class AdminController extends Controller
         }
     
         if ($request->has('username')) {
-            $customer->username = $request->username;
+            $admin->username = $request->username;
         }
         
         $admin->save();
