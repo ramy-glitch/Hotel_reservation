@@ -20,10 +20,10 @@
         <aside class="sidebar">
             <h2 class="sidebar-logo">Dashboard</h2>
             <ul class="sidebar-menu">
-                <li><a href="{{ route('customer.dashboard') }}" class="nav-link active">Account Info</a></li>
+            <li><a href="{{ route('customer.dashboard') }}" class="nav-link active">Account Info</a></li>
                 <li><a href="{{ route('hotels.index') }}" class="nav-link">Hotels</a></li>
-                <li><a href="#reservations-history" class="nav-link">Reservations History</a></li>
-                <li><a href="#notifications" class="nav-link">Notifications</a></li>
+                <li><a href="{{ route('customers.reservationHistory') }}" class="nav-link">Reservations History</a></li>
+                <li><a href="{{ route('customers.notifications') }}" class="nav-link">Notifications</a></li>
             </ul>
         </aside>
 

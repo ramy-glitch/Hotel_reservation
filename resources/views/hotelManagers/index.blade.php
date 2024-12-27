@@ -20,9 +20,9 @@
         <aside class="sidebar">
             <h2 class="sidebar-logo">Dashboard</h2>
             <ul class="sidebar-menu">
-                <li><a href="{{route('hotelManager.index')}}" class="nav-link active">Account Info</a></li>
-                <li><a href="#" class="nav-link">Hotels</a></li>
-                <li><a href="#" class="nav-link">Reservations</a></li>
+            <li><a href="{{ route('hotelManager.index') }}" class="nav-link active">Account Info</a></li>
+                <li><a href="{{ route('hotelManagers.hotels') }}" class="nav-link">Hotels</a></li>
+                <li><a href="{{ route('hotelManagers.reservationslik') }}" class="nav-link">Reservations</a></li>
             </ul>
         </aside>
 

@@ -70,8 +70,22 @@ Route::middleware('auth:hotel_manager')->group(function () {
     Route::post('hotel-managers/{id}/update-username', [HotelManagerController::class, 'updateUsername'])->name('hotelManager.updateUsername');
     Route::post('hotel-managers/{id}/update-password', [HotelManagerController::class, 'updatePassword'])->name('hotelManager.updatePassword');
     Route::delete('hotel-managers/{id}', [HotelManagerController::class, 'destroy'])->name('hotelManager.destroy');
+    
+    Route::get('MyHotels', function () {
+        return view('hotelManagers.hotels');
+    })->name('hotelManagers.hotels');
 
+    Route::get('Reservations', function () {
 
+        return view('hotelManagers.reservations');
+
+    })->name('hotelManagers.reservationslik');
+
+    Route::get('Addhotel', function () {
+        return view('hotelManagers.addHotel');
+    })->name('hotelManagers.addHotel');
+
+    
 });
 
 // Customer Routes
@@ -87,7 +101,17 @@ Route::middleware('auth:customer')->group(function () {
     Route::put('reviews/{review}', [ReviewController::class, 'update'])->name('reviews.update');
     Route::delete('reviews/{review}', [ReviewController::class, 'destroy'])->name('reviews.destroy');
 
-    Route::get('customers.booking', function () {
+    Route::get('booking', function () {
         return view('customers.booking');
     })->name('customers.booking');
+
+    Route::get('Reservations', function () {
+        return view('customers.reservationHistory');
+    })->name('customers.reservationHistory');
+
+    Route::get('Notifications', function () {
+        return view('customers.notifications');
+    })->name('customers.notifications');
+
+
 });
