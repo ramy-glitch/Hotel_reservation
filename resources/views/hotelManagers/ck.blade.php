@@ -4,7 +4,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Hotel Manager Dashboard</title>
-        <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/hm.css') }}">
     </head>
     <body>
         <div class="dashboard-container">
@@ -14,7 +14,7 @@
                 <ul class="sidebar-menu">
                 <li><a href="{{route('hotelManager.index')}}" class="nav-link ">Account Info</a></li>
                 <li><a href="{{route('hotelManagers.hotels')}}" class="nav-link ">Hotels</a></li>
-                <li><a href="{{route('hotelManagers.reservationslik')}}" class="nav-link active">Reservations</a></li>
+                <li><a href="{{route('cake')}}" class="nav-link active">Reservations</a></li>
                 </ul>
             </aside>
 

@@ -75,11 +75,10 @@ Route::middleware('auth:hotel_manager')->group(function () {
         return view('hotelManagers.hotels');
     })->name('hotelManagers.hotels');
 
-    Route::get('Reservations', function () {
+    Route::get('reservations', function () {
 
-        return view('hotelManagers.reservations');
-
-    })->name('hotelManagers.reservationslik');
+        return view('hotelManagers.ck');
+    })->name('cake');
 
     Route::get('Addhotel', function () {
         return view('hotelManagers.addHotel');
@@ -87,6 +86,8 @@ Route::middleware('auth:hotel_manager')->group(function () {
 
     
 });
+
+
 
 // Customer Routes
 Route::middleware('auth:customer')->group(function () {
