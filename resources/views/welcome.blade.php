@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hotel Reservations</title>
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+
 </head>
 <body>
     <!-- Navbar -->
@@ -42,10 +43,11 @@
 
         @foreach ($hotels as $hotel)    
     <div class="hotel">
-        <img src="{{ $hotel->photos->first()->url ?? 'default-image.jpg' }}" alt="{{ $hotel->hotelname }}">
-            <p>${{ $hotel->rooms->first()->price ?? 'N/A' }}/night</p>
-            <h3>{{ $hotel->hotelname }}</h3>
-            <p>{{ $hotel->location }}</p>
+            <img src="{{ asset('images/'.$hotel->photo_url) }}" alt="Hotel Image">
+                
+            <h4>{{ $hotel->hotelname }}</h4>
+            <p>Location: {{ $hotel->location }}</p>
+            <p>Rating: ⭐{{ $hotel->rating }}</p>
         </div>
         @endforeach
         

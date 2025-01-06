@@ -14,13 +14,20 @@ use App\Http\Controllers\ReservationRoomController;
 use App\Http\Controllers\HotelPhotoController;
 use App\Http\Controllers\RoomPhotoController;
 use App\Http\Controllers\AuthController;
+use App\Models\Hotel;
+use App\Models\HotelPhoto;
+use App\Models\Review;
 
 Route::get('/', function () {
     $hotels = App\Models\Hotel::all();
-    $reviews = App\Models\Review::all();
-    $rooms = App\Models\Room::all();
+    foreach ($hotels as $hotel) {
+        $hotel->load('photos');
+        $hotel->load('firstPhoto');
+        $hotel->load('reviews');
+        $hotel->global_rating = $hotel->reviews->avg('rating') ? number_format($hotel->reviews->avg('rating'), 1) : 'No rating available';
+    }
 
-    return view('welcome',compact('hotels','reviews','rooms'));
+    return view('welcome',compact('hotels'));
 })->name('welcome');
 
 // Authentication Routes

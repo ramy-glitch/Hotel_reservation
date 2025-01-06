@@ -17,7 +17,7 @@ class AuthController extends Controller
         $credentials = $request->only('email', 'password');
 
         if (Auth::guard('customer')->attempt($credentials)) {
-            return redirect()->intended(route('customer.dashboard'))->with('success');
+            return redirect()->intended(route('hotels.index'))->with('success');
         } elseif (Auth::guard('admin')->attempt($credentials)) {
             return redirect()->intended(route('admins.index'))->with('success');
         } elseif (Auth::guard('hotel_manager')->attempt($credentials)) {
