@@ -43,7 +43,7 @@
 
         @foreach ($hotels as $hotel)    
     <div class="hotel">
-            <img src="{{ asset('images/'.$hotel->photo_url) }}" alt="Hotel Image">
+    <img src="{{ asset('images/'.$hotel->photo_url) }}" alt="Hotel Image">
                 
             <h4>{{ $hotel->hotelname }}</h4>
             <p>Location: {{ $hotel->location }}</p>

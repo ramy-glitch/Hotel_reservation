@@ -19,15 +19,12 @@ use App\Models\HotelPhoto;
 use App\Models\Review;
 
 Route::get('/', function () {
-    $hotels = App\Models\Hotel::all();
+    $hotels = App\Models\Hotel::with(['photos', 'firstPhoto', 'reviews'])->get();
     foreach ($hotels as $hotel) {
-        $hotel->load('photos');
-        $hotel->load('firstPhoto');
-        $hotel->load('reviews');
         $hotel->global_rating = $hotel->reviews->avg('rating') ? number_format($hotel->reviews->avg('rating'), 1) : 'No rating available';
     }
 
-    return view('welcome',compact('hotels'));
+    return view('welcome', compact('hotels'));
 })->name('welcome');
 
 // Authentication Routes
