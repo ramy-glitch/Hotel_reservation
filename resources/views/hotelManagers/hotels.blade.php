@@ -60,21 +60,19 @@
                         <tr>
                             <th>Hotel Name</th>
                             <th>Location</th>
-                            <th>Stars</th>
-                            <th>Rooms</th> <!-- total rooms of all types-->
+                            <th>child limit age</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
+                        @foreach($hotels as $hotel)
                         <tr>
-                            <td>Grand Hotel</td>
-                            <td>Paris, France</td>
-                            <td>5</td>
-                            <td>150</td>
+                            <td>{{ $hotel->hotelname }}</td>
+                            <td>{{ $hotel->location }}</td>
+                            <td>{{ $hotel->child_age_limit }}</td>
                             <td>
-                               <a href="HotelForm.html" ><button class="btn-edit">Edit</button></a>
+                                <a href="HotelForm.html"><button class="btn-edit">Edit</button></a>
                                 <button class="btn-delete" onclick="showConfirmation()">Delete</button>
-
 
                                 <div class="overlay" id="confirmationOverlay">
                                     <div class="confirmation-dialog">
@@ -88,6 +86,7 @@
                                 </div>
                             </td>
                         </tr>
+                        @endforeach
                     </tbody>
                 </table>
             </section>

@@ -102,6 +102,12 @@ public function destroy($id)
 
     /********************** Hotels Operations ********************** */
 
+    public function showHotels()
+    {
+        $hotels = Hotel::where('manager_id', auth()->id())->get();
+        return view('hotelManagers.hotels', compact('hotels'));
+    }
+
     public function storehotel(Request $request)
     {
         $validator = Validator::make($request->all(), [

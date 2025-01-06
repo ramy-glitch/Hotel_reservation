@@ -71,9 +71,7 @@ Route::middleware('auth:hotel_manager')->group(function () {
     Route::post('hotel-managers/{id}/update-password', [HotelManagerController::class, 'updatePassword'])->name('hotelManager.updatePassword');
     Route::delete('hotel-managers/{id}', [HotelManagerController::class, 'destroy'])->name('hotelManager.destroy');
     
-    Route::get('MyHotels', function () {
-        return view('hotelManagers.hotels');
-    })->name('hotelManagers.hotels');
+    Route::get('MyHotels', [HotelManagerController::class, 'showHotels'])->name('hotelManagers.hotels');
 
     Route::get('reservations', function () {
 
